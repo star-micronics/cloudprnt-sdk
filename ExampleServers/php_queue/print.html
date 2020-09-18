@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Print a ticket</title>
+        <link rel="stylesheet" href="cpphp.css">
+        <script src="js/jquery-3.3.1.min.js"></script>
+
+        <script>
+            var urlParams = new URLSearchParams(window.location.search);
+            var printer = urlParams.get('mac');
+
+            function PrintATicket() {
+                $.get("print.php?mac=" + printer );                
+            }
+
+        </script>
+    </head>
+
+    <body>
+
+        <h1>Please take a ticket</h1>
+        <div class="printButton" onclick="PrintATicket();">
+            Print
+        </div>
+
+    </body>
+</html>

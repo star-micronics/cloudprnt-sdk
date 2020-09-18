@@ -1,0 +1,48 @@
+body {
+    background-color: lightblue;
+    margin: 0;
+    padding: 10pt 0 0 0;
+    text-align: center;
+    vertical-align: middle;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p {
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+.printButton {
+    width: 50%;
+    height: 50%;
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    background-color: lightslategrey;
+    border-radius: 10pt;
+    padding: 40pt;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: xx-large;
+    color: whitesmoke;
+
+}
+
+.printButton:hover {
+    background-color: steelblue;
+}
+
+.cpurl {
+    background-color: whitesmoke;
+    font-weight: bold;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    padding: 4px;
+    display: inline-block;
+}
+
+.datagrid table { border-collapse: collapse; text-align: left; }
+.datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; display: inline-block; background: #fff; overflow: hidden; border: 1px solid #000000; border-radius: 8px; }
+.datagrid table td, .datagrid table th { padding: 4px 7px; }.datagrid table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #8195E6), color-stop(1, #004669) );background:-moz-linear-gradient( center top, #8195E6 5%, #004669 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8195E6', endColorstr='#004669');background-color:#8195E6; color:#FFFFFF; font-size: 15px; font-weight: bold; } .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #000A0F; font-size: 14px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #000A0F; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid #000000;background: #E1EEF4;} .datagrid table tfoot td { padding: 0; font-size: 12px } .datagrid table tfoot td div{ padding: 2px; }
