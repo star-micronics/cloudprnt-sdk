@@ -1,6 +1,6 @@
 # 1. Overview
 
-The php_queue example is a working example CloudPRNT server based on the PHP language hosted by a server. 
+The php_queue example is a working example CloudPRNT server based on the PHP language hosted by a server.
 This demonstration implements a very simple queue management system, in which customers can press a button (displayed with web browser) to print a ticket with a queue number and optionally additional text and image data.
 
 This demonstration is intentionally basic, with no consideration for security, calling customers and other considerations that would be necessary for a real life deployment.
@@ -10,12 +10,12 @@ For printing, all print jobs are created using the Star Document Markup language
 This allows support of all CloudPRNT compatible printers, regardless of command emulation or print width.
 
 Please refer to SDK documents for CloudPRNT / Star Document Markup language / cputil details.
-(http://www.starmicronics.com/support/SDKDocumentation.aspx - CloudPRNT -> Documents)
+(https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/index.html)
 
 # 2. Contents
 
 ~~~
-php_queue_v100
+php_queue_v110
 |- Readme_En.txt                          // Release Notes (English)
 |- Readme_Jp.txt                          // Release Notes (Japanese)
 |- SoftwareLicenseAgreement.pdf           // Software License Agreement (English)
@@ -46,19 +46,21 @@ Works with these CloudPRNT client printers:
 - TSP650II with IFBD-HI01X
 - TSP700II with IFBD-HI01X
 - TSP800II with IFBD-HI01X
+- TSP650IISK with IFBD-HI01X(V1.9.0 or later)
 - SP700 with IFBD-HI02X
 
-Please refer to each CloudPRNT client printer for details. 
-You can download the manual from Star web site.
+Please refer to each CloudPRNT client printer for details.
+You can check the manual from Star web site.
+(https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/developerguide/introduction.html)
 
 # 4. Usage 
 
 This example project can be work after hosting by server including PHP and SQLite library.
 
-It can be test by access to ```http()://<Server Specified Path>/management.html```
+It can be test by access to `http://<Server Specified Path>/management.html`
 
 Please refer to SDK documents for details. 
-(http://www.starmicronics.com/support/SDKDocumentation.aspx - CloudPRNT -> Documents)
+(https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/sampleservers/php_queue.html)
 
 
 # 5. Copyright
@@ -68,5 +70,8 @@ Copyright 2019 Star Micronics Co., Ltd. All rights reserved.
 
 # 6. Release History
 
+- Ver.1.1.0 (2020/06/17)
+    + Modified to accept the capital input when register the printer MAC address at management.html 
+    + Add TSP650IISK printer model
 - Ver.1.0.0 (2019/11/05)
     + First release.

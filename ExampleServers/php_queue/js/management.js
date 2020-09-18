@@ -99,6 +99,9 @@ function NewDevice()
     var newMac = prompt("Please enter the Mac address of the device to be registered", "");
     var newQ = prompt("Ender the ID of the queue to associate with the new device", "");
 
+    var lowerMac = newMac.toString().toLowerCase();
+    newMac = lowerMac;
+
     $.get("devices.php?new=" + newMac + "&queue=" + newQ);
 }
 

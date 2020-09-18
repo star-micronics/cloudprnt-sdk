@@ -17,6 +17,9 @@ namespace cputil
             opts.JobEndCutType = CutType.Full;
             opts.JobEndFeedToCutter = true;
 
+            opts.HoldPrintControlType = HoldPrintControl.None;
+            opts.PaperPresentStatusControlType = PaperPresentStatusControl.None;
+
             for (int i = 0; i < args.Length; i++)
             {
                 switch (args[i].ToLower())
@@ -70,6 +73,12 @@ namespace cputil
                         else
                             s = new FileStream(outputfile, FileMode.Create);
 
+                        if (format.Equals("application/vnd.star.linematrix"))
+                        {
+                            opts.HorizontalResolution = (float)3.3334;
+                            opts.VerticalResolution = (float)3.3334;
+                        }
+
                         //decode(format, filename, s);
                         Document.ConvertFile(filename, s, format, opts);
                         s.Close();
@@ -92,6 +101,78 @@ namespace cputil
                         else
                             Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"printarea XXX(X is numeric)\" ");
 
+                        break;
+
+                    case "drawer-start":
+                        opts.OpenCashDrawer = DrawerOpenTime.StartOfJob; 
+                        break;
+
+                    case "drawer-end":
+                        opts.OpenCashDrawer = DrawerOpenTime.EndOfJob;
+                        break;
+
+                    case "drawer-none":
+                        opts.OpenCashDrawer = DrawerOpenTime.None;
+                        break;
+
+                    case "buzzer-start":
+                        if (args.Length - i < 1)
+                        {
+                            PrintHelp();
+                            break;
+                        }
+
+                        int buzzerStart = 0;
+                        string buzzerStart_time = args[++i];
+                        bool result_buzzerStart = int.TryParse(buzzerStart_time, out buzzerStart);
+
+                        if (result_buzzerStart)
+                            opts.BuzzerStartPattern = buzzerStart;
+                        else
+                            Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"buzzer-start X(X is numeric)\" ");
+
+                        break;
+
+                    case "buzzer-end":
+                        if (args.Length - i < 1)
+                        {
+                            PrintHelp();
+                            break;
+                        }
+
+                        int buzzerEnd = 0;
+                        string buzzerEnd_time = args[++i];
+                        bool result_buzzerEnd = int.TryParse(buzzerEnd_time, out buzzerEnd);
+
+                        if (result_buzzerEnd)
+                            opts.BuzzerEndPattern = buzzerEnd;
+                        else
+                            Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"buzzer-end X(X is numeric)\" ");
+
+                        break;
+
+                    case "holdprint-default":
+                        opts.HoldPrintControlType = HoldPrintControl.Default;
+                        break;
+
+                    case "holdprint-valid":
+                        opts.HoldPrintControlType = HoldPrintControl.Valid;
+                        break;
+
+                    case "holdprint-invalid":
+                        opts.HoldPrintControlType = HoldPrintControl.Invalid;
+                        break;
+
+                    case "presentstatus-default":
+                        opts.PaperPresentStatusControlType = PaperPresentStatusControl.Default;
+                        break;
+
+                    case "presentstatus-valid":
+                        opts.PaperPresentStatusControlType = PaperPresentStatusControl.Valid;
+                        break;
+
+                    case "presentstatus-invalid":
+                        opts.PaperPresentStatusControlType = PaperPresentStatusControl.Invalid;
                         break;
 
                     case "matrix57.5":
@@ -201,8 +282,36 @@ namespace cputil
                 "                                        the input job format does not specify a cut method.",
                 "  partialcut                          - request a partial  cut at the end of the print job, only",
                 "                                        if the input job format does not specify a cut method.",
+                "  drawer-start                        - Request that any printer connected cash drawer is opened",
+                "                                        at the beginning of the print job.",
+                "  drawer-end                          - Request that any printer connected cash drawer is opened",
+                "                                        at the end of the print job.",
+                "  drawer-none                         - Request that any printer connected cash drawer is not",
+                "                                        opened when printing this job.",
+                "  buzzer-start <number of ringing>    - Request that any printer connected buzzer is ringing",
+                "                                        by the specified number of times at the beginning of the print job.",
+                "  buzzer-end <number of ringing>      - Request that any printer connected buzzer is ringing",
+                "                                        by the specified number of times at the end of the print job.",
+                "  holdprint-default                   - Request that a printer which has a presenter(taken sensor) unit is followed",
+                "                                        printer firmware setting about the controlling the hold print function by hardware.",
+                "  holdprint-valid                     - Request that a printer which has a presenter(taken sensor) unit is enabled",
+                "                                        about the controlling the hold print function by hardware.",
+                "  holdprint-invalid                   - Request that a printer which has a presenter(taken sensor) unit is disabled",
+                "                                        about the controlling the hold print function by hardware.",
+                "  presentstatus-default               - Request that a printer which has a presenter(taken sensor) unit is followed",
+                "                                        printer firmware setting about the informing of hold print status.",
+                "  presentstatus-valid                 - Request that a printer which has a presenter(taken sensor) unit is enabled",
+                "                                        about the informing the hold print status.",
+                "  presentstatus-invalid               - Request that a printer which has a presenter(taken sensor) unit is disabled",
+                "                                        about the informing the hold print status.",
                 "  waitkey                             - wait for a key press, use as last parameter when",
-                "                                        it is useful to see the output of other options.");
+                "                                        it is useful to see the output of other options.",
+                "",
+                "",
+                "Notes:",
+                "Only one of the drawer-start/drawer-end/drawer-none options can be used per job.",
+                "And holdprint-default/holdprint-valid/holdprint-invalid and",
+                "presentstatus-default/presentstatus-valid/presentstatus-invalid options are also same usage.");
 
             Console.WriteLine(help);
         }
@@ -214,7 +323,7 @@ namespace cputil
             Version v = n.Version;
 
             Console.WriteLine("{0}: {1}.{2}.{3}.{4}", n.Name, v.Major, v.Minor, v.Build, v.Revision);
-            Console.WriteLine("cputil: 1.0.0.0");
+            Console.WriteLine("cputil: 1.1.0.0");
         }
 
         static void PrintInputs()
