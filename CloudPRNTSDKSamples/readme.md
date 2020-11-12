@@ -9,14 +9,14 @@ A command line utility exposing some of the features of `StarMicronics.CloudPRNT
 
 Exposed features include Star printer Status decoding, and print job format conversion, including Star Document markup Language rendering.
 
-[More information](/cputil)
+[More information](cputil)
  
 # Simple Server - ASP.Net Core
 
 A very minimal CloudPRNT compatible server, demonstrating the StarMicronics.CloudPrnt-Utility library.
 Implemented using ASP.Net Core 3.1 with Endpoint Routing and a single Razor Page.
 
-[More information](/SimpleServerAspNetCore)
+[More information](SimpleServerAspNetCore)
 
 
 # Copyright
