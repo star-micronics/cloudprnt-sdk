@@ -1,0 +1,34 @@
+﻿@page
+@using SimpleServer
+@model SimpleServer.IndexModel
+
+<h1>Star CloudPRNT SDK Sample</h1>
+
+<p>This is a very minimal example of implementing a CloudPRNT service, using the
+    <a href="https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/index.html" target="_blank">CloudPRNT SDK</a>
+    in .Net Core 3.1 or later.</p>
+ 
+@{
+    @if (CloudPrntEndpointLogic.lastStatus == null)
+    {
+        <h2>No device connections received yet!</h2>
+        <p>
+            Please connect your CloudPRNT device to <code>http://&lt;ServerAddress&gt;/cloudprnt</code>.
+            Also ensure that your project is running via the kestrel web server and not IIS Express.
+        </p>
+    }
+    else
+    {
+        <h2>Device Information</h2>
+
+        <ul>
+            <li>Printer MAC: @CloudPrntEndpointLogic.deviceMac</li>
+            <li>Last Connection: @((DateTime.Now - CloudPrntEndpointLogic.lastUpdate).TotalSeconds.ToString("F2")) seconds ago</li>
+            <li>Device Online: @CloudPrntEndpointLogic.lastStatus.Online</li>
+            <li>Cover Open: @CloudPrntEndpointLogic.lastStatus.CoverOpen</li>
+            <li>Print Width (dots): @CloudPrntEndpointLogic.printWidth</li>
+        </ul>
+    }
+}
+
+<a href="/">Refresh</a> <a href="print">Print Markup</a>
