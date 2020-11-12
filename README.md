@@ -10,7 +10,7 @@ The [CloudPRNTSDKSamples](/CloudPRNTSDKSamples) solution includes projects that 
 * [cputil](/CloudPRNTSDKSamples/cputil)
   A .Net Core based command line tool that can be invoked as a process by non .Net environments such as PHP, Node.js, Python, Perl, etc. Provides access to features such as Star Document markdown Language rendering.
 
-* [SimpleServer](/CloudPRNTSDKSamples/SimpleServerAspNetCore)
+* [SimpleServer - ASP.Net Core](/CloudPRNTSDKSamples/SimpleServerAspNetCore)
   A very minimal ASP.Net Core server example.
 
 ## Sample CloudPRNT servers in non .Net based languages
