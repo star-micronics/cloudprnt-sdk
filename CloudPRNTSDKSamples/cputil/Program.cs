@@ -83,7 +83,6 @@ namespace cputil
                         Document.ConvertFile(filename, s, format, opts);
                         s.Close();
 
-                        Console.Error.WriteLine(String.Format("Wrote output to \"{0}\"", outputfile));
                         break;
 
                     case "printarea":
