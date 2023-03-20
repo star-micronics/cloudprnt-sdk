@@ -91,7 +91,7 @@ namespace cputil
                         string markup_string = args[++i];
                         byte[] bit_string = System.Text.Encoding.UTF8.GetBytes(markup_string);
                         Stream s = Console.OpenStandardOutput();
-                        Document.Convert(bit_string, "text/vnd.star.markup", s, format, null);
+                        Document.Convert(bit_string, "text/vnd.star.markup", s, format, opts);
                         s.Close();
                         break;
                     }
