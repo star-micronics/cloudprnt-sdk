@@ -55,7 +55,7 @@ namespace cputil
                         PrintInputs();
                         break;
 
-                    case "decode":
+                    case "decode": {
                         if(args.Length - i < 3)
                         {
                             PrintHelp();
@@ -85,7 +85,16 @@ namespace cputil
 
                         Console.Error.WriteLine(String.Format("Wrote output to \"{0}\"", outputfile));
                         break;
-
+                    }
+                    case "decode-markup": {
+                        string format = args[++i];
+                        string markup_string = args[++i];
+                        byte[] bit_string = System.Text.Encoding.UTF8.GetBytes(markup_string);
+                        Stream s = Console.OpenStandardOutput();
+                        Document.Convert(bit_string, "text/vnd.star.markup", s, format, null);
+                        s.Close();
+                        break;
+                    }
                     case "printarea":
                         if(args.Length - i < 1)
                         {
@@ -263,6 +272,7 @@ namespace cputil
                 "                                        \"image/png\" or \"application/vnd.star.markup\".",
                 "  decode <format> <filename> <output> - Convert file to the specified format. Format should",
                 "                                        be provides as a media type string.",
+                "  decode-markup <format> <string>     - Convert Star Document Markup as string to text/vnd.star.markup format.",
                 "                                        decoder data is writtenn to the file specified by",
                 "                                        <output>. If output is set to \"-\" or \"[stdout]\"",
                 "                                        then data will be written to standard output.",
