@@ -212,6 +212,10 @@ namespace cputil
                         opts.SupportUTF8 = true;
                         break;
 
+                    case "sbcs":
+                        opts.SupportUTF8 = false;
+                        break;
+
                     case "scale-to-fit":
                         opts.ScaleToFit = true;
                         break;
@@ -274,7 +278,8 @@ namespace cputil
                 "  matrix69.5                          - set device constraints for a dot-matrix 69.5mm\" printer",
                 "  matrix3/matrix76                    - set device constraints for a dot-matrix 76mm/3\" printer",
                 "  printarea <dot length>              - set device constraints for a specified printable area dot size of printer",
-                "  utf8                                - specify that the target device supports UTF8 encoding",
+                "  utf8                                - specify that the target device supports UTF8 encoding (default)",
+                "  sbcs                                - specify that the target device supports only single byte codepages",
                 "  dither                              - specify that colour/greyscale images should be ditherer",
                 "  scale-to-fit                        - specify that any images which exceed the device width",
                 "                                        should be resized to fit the page.",
@@ -321,9 +326,12 @@ namespace cputil
             Assembly a = typeof(StarMicronics.CloudPrnt.Document).Assembly;
             AssemblyName n = a.GetName();
             Version v = n.Version;
-
+            
             Console.WriteLine("{0}: {1}.{2}.{3}.{4}", n.Name, v.Major, v.Minor, v.Build, v.Revision);
-            Console.WriteLine("cputil: 1.1.0.0");
+
+            AssemblyName cn = Assembly.GetExecutingAssembly().GetName();
+            Version cv = cn.Version;
+            Console.WriteLine($"{cn.Name}: {cv.Major}.{cv.Minor}.{cv.Build}.{cv.Revision}");
         }
 
         static void PrintInputs()

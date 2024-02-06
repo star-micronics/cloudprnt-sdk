@@ -1,0 +1,6 @@
+The following commands should do before performing "./package.sh" to apply latest making nupkg.
+
+commands:
+nuget locals all -clear
+nuget add StarMicronics.CloudPRNT-Utility.1.1.2.nupkg -Source ./packages
+dotnet add package StarMicronics.CloudPRNT-Utility -s ./packages -v 1.1.2

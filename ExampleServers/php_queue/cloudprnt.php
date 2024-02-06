@@ -1,117 +1,13 @@
 <?php
 // Sample CloudPRNT Queue system handler
 
+require("cputil.php");
+require("mqtt_handle_received_message.php");
+
 $dbname = "simplequeue.sqlite";    // database file name
 $db = new SQLite3($dbname);        // database into a single table for easier passing between functions
-$cputilpath = "";
+$db->busyTimeout(1000);
 
-/*
-    Determine the path of cputil and call name.
-    If the path of "cputil" application set in the environment variable, 
-    then it will be "cputil" or "cputil.exe". 
-    If create the directory of "cputil" in same directory with "cloudprnt.php"
-    and put the "cputil" application, then it will be "cputil\cputil.exe".
-    (In this sample indicated on Windows environment)
-*/
-if (substr(PHP_OS,0,3) == 'WIN') {
-    if (file_exists(dirname(__FILE__).'\cputil\cputil.exe')) {
-        $cputilpath = 'cputil\cputil.exe';
-    } else {
-        $cputilpath = 'cputil.exe';
-    }
-} else {
-    if (file_exists(dirname(__FILE__).'/cputil/cputil')) {
-        $cputilpath = 'cputil/cputil';
-    } else {
-        $cputilpath = 'cputil';
-    }
-}
-
-/*
-	Use cputil to convert an input file to the requested output format and device width
-	and write to a requested output file.
-*/
-function getCPConvertedJob($inputFile, $outputFormat, $deviceWidth, $outputFile){
-    global $cputilpath;
-    $options = "";
-
-    if ($deviceWidth <= (58 * 8)) {
-        $options = $options."thermal2";
-    } elseif ($deviceWidth <= (72 * 8)) {
-        $options = $options."thermal3";
-    } elseif ($deviceWidth <= (82 * 8)) {
-        $options = $options."thermal82";
-    } elseif ($deviceWidth <= (112 * 8)) {
-        $options = $options."thermal4";
-    }
-
-    $options = $options." scale-to-fit dither ";
-
-    system($cputilpath." ".$options." decode \"".$outputFormat."\" \"".$inputFile."\" \"".$outputFile."\"", $retval);
-}
-
-/*
-	Create the print job using Star Markup 
-*/
-function renderMarkupJob($filename, $position, $queue, $design) {
-    $file = fopen($filename, 'w+');
-
-    if ($file != FALSE) {
-        fwrite($file, "[align: centre]");
-
-        if (isset($design['Logo'])) {
-            fwrite($file, "[image: url ".$design['Logo']."; width 100%]\n");
-        }
-
-        if (isset($design['Header'])) {
-            fwrite($file, $design['Header']."\n");
-        }
-
-        fwrite($file, "[align: centre]");
-        fwrite($file, "[mag: w 4; h 4]".$position."[mag]\n");
-
-        if (isset($design['Footer'])) {
-            fwrite($file, $design['Footer']."\n");
-        }
-
-        if (isset($design['Coupon'])) {
-            fwrite($file, "[image: url ".$design['Coupon']."; width 100%]\n");
-        }
-
-        fwrite($file, "[cut]");
-
-        fclose($file);
-    }
-}
-
-/*
-	Read the formatting parameters for the specified queue id from the database (logo, header, footer, coupon...)
-	and return as a table
-*/
-function getQueuePrintParameters($db, $queue) {
-    $qfields = array();
-    $qfields['Header'] = "";
-    $qfields['Footer'] = "";
-    $qfields['Logo'] = "";
-    $qfields['Coupon'] = "";
-
-	$results = $db->query("SELECT Header, Footer, Logo, Coupon FROM Queues WHERE id = '" .$queue."'");
-
-    if (isset($results)) {
-        $row = $results->fetchArray();    // fetch next row
-
-        if (isset($row) && !empty($row)) {
-            $qfields['Header'] = $row['header'];
-            $qfields['Footer'] = $row['footer'];
-            $qfields['Logo'] = $row['logo'];
-            $qfields['Coupon'] = $row['coupon'];
-        } else {
-            // error message
-        }
-    }
-
-	return $qfields;
-}
 
 function handleCloudPRNTGetJob($db) {
     $content_type = $_GET['type'];    // determine the media type that the cloudPRNT device is requesting
@@ -142,23 +38,6 @@ function handleCloudPRNTGetJob($db) {
 }
 
 /*
-	Get a list of supported input types from "cputil" for a given input type
-*/
-function getCPSupportedOutputs($input) {
-    global $cputilpath;
-    $file = popen($cputilpath." mediatypes-mime \"text/vnd.star.markup\"", "r");
-
-    if ($file != FALSE) {
-        $output = fread($file, 8192);
-
-        pclose($file);
-        return json_decode($output);
-    }
-
-    return "";
-}
-
-/*
 	Determine whether printing is required for a particular printer, buy checking it's 'Printing' field
 	which will be set to the position number to be printer when a job is required.
 	Return the position, queue ID and device print width if printing is required
@@ -177,6 +56,35 @@ function getDevicePrintingRequired($db, $mac) {
     } else {
         // error message
     }
+}
+
+/*
+	Read the formatting parameters for the specified queue id from the database (logo, header, footer, coupon...)
+	and return as a table
+*/
+function getQueuePrintParameters($db, $queue) {
+    $qfields = array();
+    $qfields['Header'] = "";
+    $qfields['Footer'] = "";
+    $qfields['Logo'] = "";
+    $qfields['Coupon'] = "";
+
+	$results = $db->query("SELECT Header, Footer, Logo, Coupon FROM Queues WHERE id = '" .$queue."'");
+
+    if (isset($results)) {
+        $row = $results->fetchArray();    // fetch next row
+
+        if (isset($row) && !empty($row)) {
+            $qfields['Header'] = $row['header'];
+            $qfields['Footer'] = $row['footer'];
+            $qfields['Logo'] = $row['logo'];
+            $qfields['Coupon'] = $row['coupon'];
+        } else {
+            // error message
+        }
+    }
+
+	return $qfields;
 }
 
 /*
@@ -220,14 +128,18 @@ function setDeviceInfo($db, $mac, $width, $clientType, $clientVer) {
 	the specified mac address.
 */
 function setDeviceStatus($db, $mac, $status) {
-	$tstamp = time();    // Store time simply as number of seconds since 1970-01-01 00:00:00+0000 (UTC)
-    $affected = $db->query("UPDATE Devices SET 'Status' = '".$status."', 'LastPoll' = '".$tstamp."' WHERE DeviceMac = '".$mac."';");
 
-    if (empty($affected)) {
+    // Confirm device is resgitered.
+    $exists = $db->querySingle("SELECT DeviceMac FROM Devices WHERE DeviceMac = '".$mac."'");
+
+    if (!isset($exists)) {
         return false;
     }
 
-    return true;
+    $tstamp = time();    // Store time simply as number of seconds since 1970-01-01 00:00:00+0000 (UTC)
+    $affected = $db->query("UPDATE Devices SET 'Status' = '".$status."', 'LastPoll' = '".$tstamp."' WHERE DeviceMac = '".$mac."';");
+
+	return true;
 }
 
 function handleCloudPRNTPoll($db) {
@@ -333,18 +245,28 @@ function handleCloudPRNTDelete($db) {
 
 if (!isset($db) || empty($db)) {
     http_response_code(500);
-} elseif ($_SERVER['REQUEST_METHOD'] === "GET") {
-    if(strpos($_SERVER['QUERY_STRING'], "&delete") !== false) {    // if server set "deleteMethod":"GET" in POST response
-        handleCloudPRNTDelete($db);
-    } else {    // Request a content of print job
-        handleCloudPRNTGetJob($db);
-    }
-} elseif ($_SERVER['REQUEST_METHOD'] === "POST") {
-    handleCloudPRNTPoll($db);
-} elseif ($_SERVER['REQUEST_METHOD'] === "DELETE") {
-    handleCloudPRNTDelete($db);
 } else {
-    http_response_code(405);
+    if (isset($argc, $argv)) {    
+        if ($argv[1] == "MQTT") { // Received MQTT Message (CloudPRNT MQTT Protocol)
+            $mqtt_components = explode(" ", $argv[2], 2); // output of "mosquitto_pub -v". topic and payload.
+            $mqtt_topic = $mqtt_components[0];
+            $mqtt_payload = $mqtt_components[1];
+
+            handleReceivedMqttMessage($db, $mqtt_topic, $mqtt_payload);
+        }
+    } elseif ($_SERVER['REQUEST_METHOD'] === "GET") { // Received HTTP Request
+        if(strpos($_SERVER['QUERY_STRING'], "&delete") !== false) {    // if server set "deleteMethod":"GET" in POST response
+            handleCloudPRNTDelete($db);
+        } else {    // Request a content of print job
+            handleCloudPRNTGetJob($db);
+        }
+    } elseif ($_SERVER['REQUEST_METHOD'] === "POST") {
+        handleCloudPRNTPoll($db);
+    } elseif ($_SERVER['REQUEST_METHOD'] === "DELETE") {
+        handleCloudPRNTDelete($db);
+    } else {
+        http_response_code(405);
+    }
 }
 
 $db->close();

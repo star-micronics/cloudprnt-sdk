@@ -1,0 +1,17 @@
+{
+    "title":"star_cloudprnt_server_setting",
+    "version":"1.0.0",
+    "serverSupportProtocol":["HTTP", "MQTT"],
+    "settingForMQTT":{
+        "useTriggerPOST":false,
+        "mqttConnectionSetting":{
+            "hostName":"172.16.212.228",
+            "portNumber":1883,
+            "useTls" : false,
+            "authenticationSetting":{
+                "username":"user",
+                "password":"pass"
+            }
+        }
+    }
+}

@@ -19,9 +19,17 @@ function delDevice($db, $mac) {
     }
 }
 
+function resetDevice($db, $mac) {
+    $affected = $db->query("UPDATE Devices SET 'Printing' = 0 WHERE DeviceMac = '".$mac."';");
+
+    if (!isset($affected)) {
+        http_response_code(500);
+    }
+}
+
 function listDevices($db) {
     global $deviceTimeout;
-    $results = $db->query("SELECT DeviceMac, Status, QueueID, Queues.name, ClientType, ClientVersion, LastPoll FROM Devices INNER JOIN Queues ON Queues.id = Devices.QueueID");
+    $results = $db->query("SELECT DeviceMac, Status, QueueID, Queues.name, Printing, ClientType, ClientVersion, LastPoll FROM Devices INNER JOIN Queues ON Queues.id = Devices.QueueID");
     $rdata = array();
     $count = 0;
 
@@ -39,14 +47,18 @@ function listDevices($db) {
 
             $rdata[$count] = array("mac" => strval($row['DeviceMac']));
 
-            if (intval($secondsElapsed) < intval($deviceTimeout)) {
+            if ($lpt == 0) { 
+                $rdata[$count] += array("status" => "Not Connected Yet.");
+            }
+            else if (intval($secondsElapsed) < intval($deviceTimeout)) {
                 $rdata[$count] += array("status" => strval($row['Status']));
             } else {
-                $rdata[$count] += array("status" => "Connection Lost");
+                $rdata[$count] += array("status" => "Last status was more than 10 seconds ago.");
             }
 
             $rdata[$count] += array("queueId" => strval($row['QueueID']));
             $rdata[$count] += array("queueName" => strval($row['name']));
+            $rdata[$count] += array("printing" => strval($row['Printing']));
             $rdata[$count] += array("clientType" => strval($row['ClientType']));
             $rdata[$count] += array("clientVersion" => strval($row['ClientVersion']));
             $rdata[$count] += array("lastConnection" => strval($row['LastPoll']));
@@ -65,6 +77,7 @@ function listDevices($db) {
 function handleGETRequest() {
     $dbname = "simplequeue.sqlite";    // database file name
     $db = new SQLite3($dbname);
+    $db->busyTimeout(1000);
 
     if (!empty($_GET['new'])) {    
         $new = $_GET['new'];
@@ -78,6 +91,10 @@ function handleGETRequest() {
         $del = $_GET['del'];
     }
 
+    if (!empty($_GET['reset'])) {
+        $reset = $_GET['reset'];
+    }
+
     if (!isset($db) || empty($db)) {
         http_response_code(500);
         return;
@@ -87,6 +104,8 @@ function handleGETRequest() {
         addDevice($db, $new, $queue);
     } elseif (isset($del)) {
         delDevice($db, $del);
+    } elseif (isset($reset)) {
+        resetDevice($db, $reset);
     } else {
         listDevices($db);
     }

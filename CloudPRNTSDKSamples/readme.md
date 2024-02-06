@@ -1,59 +1,61 @@
 # 1. Overview
 
-This package contains cputil Ver 1.1.0.
+This package contains cputil Ver 1.1.2.
 cputil is intented to serve and a useful back-end tool to help with implementing CloudPRNT servers that are not .Net or .Net Core based.
 
-cputil can be use on any platform supported by .Net Core 2.1 including:
+cputil can be use on any platform supported by .NET 6.0 including:
 
 - Windows x86 and x64
-    + cputil-win-x86_v110.zip / cputil-win-x64_v110.zip
+    + cputil-win-x86_v112.zip / cputil-win-x64_v112.zip
 - Linux x64
-    + cputil-linux-x64_v110.tar.gz
+    + cputil-linux-x64_v112.tar.gz
 - Apple Mac OS (OSX) x64 (Except 10.15 or later)
-    + cputil-osx-x64_v110.tar.gz
+    + cputil-osx-x64_v112.tar.gz
 - Apple Mac OS (OSX) x64 (10.15 or later)
-    + cputil-osx-x64_v110.zip
+    + cputil-osx-x64_v112.zip
 - Linux Arm (Raspberry PI compatible)
-    + cputil-linux-arm_v110.tar.gz
+    + cputil-linux-arm_v112.tar.gz
 
 In all cases, it is possible to build a self contained package that can be run on the desired platform without the need for a .Net Framework or .Net Core installation.
 
 Please refer to SDK documents for details.
-(https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/index.html)
+(https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/index.html)
 
 
 # 2. Contents
 
 ~~~
-cputil-<Platform Name>_v110.zip(or .tar.gz)
+cputil-<Platform Name>_v112.zip(or .tar.gz)
 |- Readme_En.txt                          // Release Notes (English)
 |- Readme_Jp.txt                          // Release Notes (Japanese)
 |- SoftwareLicenseAgreement.pdf           // Software License Agreement (English)
 |- SoftwareLicenseAgreement_Jp.pdf        // Software License Agreement (Japanese)
+|- SoftwareLicenseAgreementAppendix.pdf   // Software License Agreement Appendix
 |
 +- cputil-<Platform Name>
-   |- cputil(.exe)                        // cputil executable file
+    |- cputil(.exe)                        // cputil executable file
 ~~~
 
 # 3. Scope
 
-cputil can be use on any platform supported by .Net Core 2.1 including:
+cputil can be use on any platform supported by .NET 6.0 including:
 
 - Windows x86 and x64
-    + cputil-win-x86_v110.zip / cputil-win-x64_v110.zip
+    + cputil-win-x86_v112.zip / cputil-win-x64_v112.zip
 - Linux x64
-    + cputil-linux-x64_v110.tar.gz
+    + cputil-linux-x64_v112.tar.gz
 - Apple Mac OS (OSX) x64 (Except 10.15 or later)
-    + cputil-osx-x64_v110.tar.gz
+    + cputil-osx-x64_v112.tar.gz
 - Apple Mac OS (OSX) x64 (10.15 or later)
-    + cputil-osx-x64_v110.zip
+    + cputil-osx-x64_v112.zip
 - Linux Arm (Raspberry PI compatible)
-    + cputil-linux-arm_v110.tar.gz
+    + cputil-linux-arm_v112.tar.gz
 
 Works with these CloudPRNT client printers:
 
 - mC-Print2
 - mC-Print3
+- TSP100IV
 - TSP650II with IFBD-HI01X
 - TSP700II with IFBD-HI01X
 - TSP800II with IFBD-HI01X
@@ -79,21 +81,21 @@ Please unzip/extract cputil-<Platform Name>.zip(or .tar.gz) to any specified pat
 The below operation is to test this "Usage Example". Please open the terminal or command prompt on each PC and perform following command.
 
 - Windows
-    ~~~
-    > cd <Extracted Directory Path>\cputil-win-x64_v110\cputil-win-x64
+    ~~~ console
+    > cd <Extracted Directory Path>\cputil-win-x64_v112\cputil-win-x64
     ~~~
     or
-    ~~~
-    > cd <Extracted Directory Path>\cputil-win-x86_v110\cputil-win-x86
+    ~~~ console
+    > cd <Extracted Directory Path>\cputil-win-x86_v112\cputil-win-x86
     ~~~
 
 - Linux
-    ~~~
+    ~~~ console
     $ cd <Extracted Directory Path>/cputil-linux-x64
     ~~~
 
 - macOS
-    ~~~
+    ~~~ console
     $ cd <Extracted Directory Path>/cputil-osx-x64
     ~~~
 
@@ -105,25 +107,25 @@ Therefore just input "cputil" is enough when perform cputil command on terminal 
 
 Star CloudPRNT devices will report their status in Star ASB format, as a string of 7 or more hexadecimal values. For Example:
 
-~~~    
+~~~ console
 > "23 86 00 00 00 00 00 00 00 00 00"
 ~~~
 
 This is not easy to decode in all languages, and do cputil provides a method to convert this into JSON format data, e.g.:
 
 - Windows
-    ~~~
+    ~~~ console
     > .\cputil.exe jsonstatus "23 86 00 00 00 00 00 00 00 00 00"
     ~~~
 
 - Linux / macOS
-    ~~~
+    ~~~ console
     $ ./cputil jsonstatus "23 86 00 00 00 00 00 00 00 00 00"
     ~~~
 
 will generate the output:
 
-~~~
+~~~ console
 > {
 >   "Online": true,
 >   "CoverOpen": false,
@@ -144,7 +146,7 @@ will generate the output:
 
 ## Handling Print Job media formats
 
-cputil can help with key parts of the CloudPRNT printing  process. 
+cputil can help with key parts of the CloudPRNT printing process. 
 A server can prepare a print job in a single input format, which may not be natively supported by the \cloudPRNT client device. 
 The server can then use cputil to convert the job, as needed to a format that the CloudPRNT client does support.
 
@@ -170,7 +172,7 @@ When a CloudPRNT compatible server has a print job ready for a particular client
 
 For example:
 
-~~~
+~~~ console
 > {
 >   "jobReady": true,
 >   "mediaTypes": ["image/jpeg", "image/png"]
@@ -182,18 +184,18 @@ At this point in the job printing negotiation, cputil can be used to prepare the
 For example, for a server that will use a PNG image as the initial print job source, use (In this sample, sourceimage.png is the name of the input file. Please prepare and put the file to directory same as cputil executable):
 
 - Windows
-    ~~~
+    ~~~ console
     > .\cputil.exe mediatypes sourceimage.png
     ~~~    
 
 - Linux / macOS
-    ~~~
+    ~~~ console
     $ ./cputil mediatypes sourceimage.png
     ~~~
 
 which will generate the JSON ready output:
 
-~~~
+~~~ console
 > ["image/png","image/jpeg","application/vnd.star.raster","application/vnd.star.line","application/vnd.star.starprnt","application/vnd.star.starprntcore"]
 ~~~
 
@@ -213,13 +215,13 @@ For example, if a server has prepared a print job as png data, and the client re
 
 - Windows
 
-    ~~~
+    ~~~ console
     > .\cputil.exe decode "application/vnd.star.starprnt" sourceimage.png outputdata.bin
     ~~~
 
 - Linux / macOS
 
-    ~~~
+    ~~~ console
     $ ./cputil decode "application/vnd.star.starprnt" sourceimage.png outputdata.bin
     ~~~
 
@@ -228,12 +230,14 @@ Which will convert the png input file into printer command data stored in "outpu
 And also, if a server has prepared a print job as star document markup text data(filename extension is ".stm"), and the client requests it as StarPRNT printer command data (application/vnd.star.starprnt) then cputil can be used:
 
 - Windows
-    ~~~
+
+    ~~~ console
     > .\cputil.exe decode application/vnd.star.starprnt starmarkup.stm outputdata.bin
     ~~~
 
 - Linux / macOS
-    ~~~
+
+    ~~~ console
     $ ./cputil decode application/vnd.star.starprnt starmarkup.stm outputdata.bin
     ~~~
 
@@ -266,25 +270,26 @@ For example, to prepare print data as StarPRNT commands for a 2inch printer from
 - Windows
     + For 2inch printer(mC-Print2):
 
-        ~~~
+        ~~~ console
         > .\cputil.exe thermal2 dither scale-to-fit decode "application/vnd.star.starprnt" sourceimage.png outputdata_2.bin
         ~~~
 
     + For 3inch printer(mC-Print3):
 
-        ~~~
+        ~~~ console
         > .\cputil.exe thermal3 dither scale-to-fit decode "application/vnd.star.starprnt" sourceimage.png outputdata_3.bin
         ~~~
 
 - Linux / macOS
     + For 2inch printer(mC-Print2):
     
-        ~~~
+        ~~~ console
         $ ./cputil thermal2 dither scale-to-fit decode "application/vnd.star.starprnt" sourceimage.png outputdata_2.bin
         ~~~
 
     + For 3inch printer(mC-Print3):
-        ~~~
+
+        ~~~ console
         $ ./cputil thermal3 dither scale-to-fit decode "application/vnd.star.starprnt" sourceimage.png outputdata_3.bin
         ~~~
 
@@ -313,23 +318,27 @@ For example, to prepare print data as StarPRNT commands for a 2 inch printer fro
 
 - Windows
     + For 2inch printer(mC-Print2):
-        ~~~
+
+        ~~~ console
         > .\cputil.exe thermal2 scale-to-fit drawer-end decode "application/vnd.star.starprnt" sourceimage.png outputdata_2.bin
         ~~~
 
     + For 3inch printer(mC-Print3):
-        ~~~
+
+        ~~~ console
         > .\cputil.exe thermal3 scale-to-fit buzzer-end 1 decode "application/vnd.star.starprnt" sourceimage.png outputdata_3.bin
         ~~~
 
 - Linux / macOS
     + For 2inch printer(mC-Print2):
-        ~~~
+
+        ~~~ console
         $ ./cputil thermal2 scale-to-fit drawer-end decode "application/vnd.star.starprnt" sourceimage.png outputdata_2.bin
         ~~~
 
     + For 3inch printer(mC-Print3):
-        ~~~
+
+        ~~~ console
         $ ./cputil thermal3 scale-to-fit buzzer-end 1 decode "application/vnd.star.starprnt" sourceimage.png outputdata_3.bin
         ~~~
 
@@ -357,23 +366,27 @@ For example, to prepare print data as StarPRNT commands for a 2 inch printer fro
 
 - Windows
     + For 2inch printer(mC-Print2):
-        ~~~
+
+        ~~~ console
         > .\cputil.exe thermal2 scale-to-fit presentstatus-valid holdprint-invalid decode application/vnd.star.starprnt sourceimage.png outputdata_2.bin
         ~~~
 
     + For 3inch printer(mC-Print3):
-        ~~~
+
+        ~~~ console
         > .\cputil.exe thermal3 scale-to-fit presentstatus-valid holdprint-invalid decode application/vnd.star.starprnt sourceimage.png outputdata_3.bin
         ~~~
 
 - Linux / macOS
     + For 2inch printer(mC-Print2):
-        ~~~
+
+        ~~~ console
         $ ./cputil thermal2 scale-to-fit presentstatus-valid holdprint-invalid decode "application/vnd.star.starprnt" sourceimage.png outputdata_2.bin
         ~~~
 
     + For 3inch printer(mC-Print3):
-        ~~~
+
+        ~~~ console
         $ ./cputil thermal3 scale-to-fit presentstatus-valid holdprint-invalid decode "application/vnd.star.starprnt" sourceimage.png outputdata_3.bin
         ~~~
 
@@ -386,7 +399,7 @@ Alternatively, ensure that your CloudPRNT service uses device command print job 
 
 # 5. Limitation
 
-1. Word wrapping / column command for starmarkup features with Unicode character are only supported  by mC-Print2 / mC-Print3 / TSP650II.
+1. Word wrapping / column command for starmarkup features with Unicode character are only supported by mC-Print2 / mC-Print3 / TSP650II.
 
 
 # 6. OSS Licenses
@@ -405,6 +418,17 @@ cputil package includes these libraries which is included OSS licenses.
 Copyright 2019 Star Micronics Co., Ltd. All rights reserved.
 
 # 8. Release History
+
+- Ver 1.1.2 (2022/04/28)
+    + Update the SixLabors.ImageSharp library from V1.0.2 to V1.0.4 to support .NET 6.0 environment.
+    + Update the Newtonsoft.Json library from V12.0.3 to V13.0.1.
+    + Update the .NET framework from .NET Core 3.1 to .NET 6.0.
+
+- Ver 1.1.1 (2021/01/18)
+    + Update the SixLabors.ImageSharp library from V100-beta007 to V1.0.2.
+    + Update the .NET Core framework from 2.1 to 3.1.
+    + Improve the long data URLs length limit in Markup.
+    + Support for the sbcs option in cputil for models that do not support utf8 code pages.
 
 - Ver.1.1.0 (2020/06/17)
     + Support the command option of drawer for controlling CashDrawer.

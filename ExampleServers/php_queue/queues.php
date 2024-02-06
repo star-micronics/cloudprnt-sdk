@@ -48,6 +48,8 @@ function listQueues($db) {
 function handleGETRequest() {
     $dbname = "simplequeue.sqlite";    // database file name
     $db = new SQLite3($dbname);
+    $db->busyTimeout(1000);
+
     if (!empty($_GET['new'])) {    
         $new = $_GET['new'];
     }

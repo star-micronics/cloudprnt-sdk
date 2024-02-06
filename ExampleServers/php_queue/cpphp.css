@@ -21,6 +21,7 @@ p {
     background-color: lightslategrey;
     border-radius: 10pt;
     padding: 40pt;
+    margin : 20pt ;
     cursor: pointer;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: xx-large;

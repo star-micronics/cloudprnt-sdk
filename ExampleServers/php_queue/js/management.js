@@ -22,8 +22,8 @@ function UpdateDeviceTable() {
         .done(function(data) {
             var table = "<table>"
 
-            table += "<thead><tr><th>Device</th><th style='width: 200px'>Status</th><th style='width: 150px'>Queue</th><th>Client Type</th><th>Last Connection</th><th></th></thead>";
-            table += '<tfoot><tr><td colspan="6"><div id="no-paging">&nbsp;<a href="javascript:NewDevice();">Register A New Device</a></div></tr></tfoot>';
+            table += "<thead><tr><th>Device</th><th style='width: 200px'>Status</th><th>Queue</th><th>Printing</th><th>Client Type</th><th>Last Connection</th><th></th></thead>";
+            table += '<tfoot><tr><td colspan="7"><div id="no-paging">&nbsp;<a href="javascript:NewDevice();">Register A New Device</a></div></tr></tfoot>';
 
             for(var i = 0; i < data.length; i++)
             {
@@ -32,16 +32,24 @@ function UpdateDeviceTable() {
                 var lastConnect = new Date(1970, 0, 1);
                 lastConnect.setSeconds(device.lastConnection);
 
+                var printing = "-";
+                if (device.printing > 0) {
+                    printing = device.printing
+                }
+
                 table += "<tr>";
                 table += "<td>" + device.mac + "</td>";
                 table += "<td>" + device.status + "</td>";
                 table += "<td>" + device.queueName + "</td>";
+                table += "<td>" + printing + "</td>";
                 table += "<td>" + device.clientType + " (" + device.clientVersion + ")</td>";
                 table += "<td>" + lastConnect.toLocaleString() + "</td>";
 
                 table += "<td>";
-                table += "<a href='print.html?mac=" + device.mac +"'>Show</a>";
+                table += "<a href='print.html?mac=" + device.mac +"'>Show</a><br>";
+                table += ' <a href=\"javascript:getStatus(\'' + device.mac + '\');\">Get Status (MQTT)</a><br>';
                 table += ' <a href=\"javascript:delDevice(\'' + device.mac + '\');\">Delete</a>';
+                table += ' <a href=\"javascript:resetDevice(\'' + device.mac + '\');\">Reset</a>';
                 table += "</td>";
                 
                 table += "</tr>"
@@ -105,10 +113,26 @@ function NewDevice()
     $.get("devices.php?new=" + newMac + "&queue=" + newQ);
 }
 
+function getStatus(mac)
+{
+    $.get("management.php?mac=" + mac + "&method=request-client-status")
+    .done(function() {
+        window.alert("MQTT message has been published successfully.");
+    })
+    .fail(function() { 
+        window.alert("Failed to publish a MQTT message.");
+    } )
+}
+
 function delDevice(mac)
 {
     if(confirm("Remove Device, are you sure?"))
         $.get("devices.php?del=" + mac);
+}
+
+function resetDevice(mac)
+{
+    $.get("devices.php?reset=" + mac);
 }
 
 function NewQueue()

@@ -2,16 +2,16 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Company>Star Micronics</Company>
     <Authors>Star Micronics</Authors>
     <Copyright>Copyright 2020 Star Micronics Co., Ltd.</Copyright>
-    <Version>1.1.0</Version>
+    <Version>1.1.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="StarMicronics.CloudPRNT-Utility" Version="1.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="StarMicronics.CloudPRNT-Utility" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>

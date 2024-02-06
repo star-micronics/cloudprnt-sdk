@@ -10,7 +10,47 @@
             var printer = urlParams.get('mac');
 
             function PrintATicket() {
-                $.get("print.php?mac=" + printer );                
+                $.get("print.php?mac=" + printer )
+                .done(function() {
+                    window.alert("Successfully triggered print.");
+                })
+                .fail(function() { 
+                    window.alert("An error has occurred.");
+                } )
+
+            }
+
+            function PrintATicketTriggerPost() {
+                $.get("print.php?mac=" + printer  + "&protocol=mqtt&method=request-post")
+                .done(function() {
+                    window.alert("Successfully triggered print.");
+                })
+                .fail(function() { 
+                    window.alert("An error has occurred.");
+                } )
+                
+            }
+
+            function PrintATicketPassUrl() {
+                $.get("print.php?mac=" + printer  + "&protocol=mqtt&method=print-job&jobType=url")
+                .done(function() {
+                    window.alert("Successfully triggered print.");
+                })
+                .fail(function() { 
+                    window.alert("An error has occurred.");
+                } )
+                
+            }
+
+            function PrintATicketAllMqtt() {
+                $.get("print.php?mac=" + printer  + "&protocol=mqtt&method=print-job&jobType=raw")
+                .done(function() {
+                    window.alert("Successfully triggered print.");
+                })
+                .fail(function() { 
+                    window.alert("An error has occurred.");
+                } )
+                
             }
 
         </script>
@@ -20,7 +60,21 @@
 
         <h1>Please take a ticket</h1>
         <div class="printButton" onclick="PrintATicket();">
-            Print
+            Print (HTTP)
+        </div>
+
+        <h2>To try "Print (MQTT)" below, a CloudPRNT Version MQTT compatible printer is required.</h2>
+
+        <div class="printButton" onclick="PrintATicketTriggerPost();">
+            Print (MQTT : Trigger POST)
+        </div>
+
+        <div class="printButton" onclick="PrintATicketPassUrl();">
+            Print (MQTT : Pass URL)
+        </div>
+
+        <div class="printButton" onclick="PrintATicketAllMqtt();">
+            Print (MQTT : Full MQTT)
         </div>
 
     </body>
