@@ -1,0 +1,16 @@
+[column: left ${time}; right ${staff_name}]\
+
+[magnify: width 2; height 2]\
+[negative: on]\
+[sp] ${classification} [sp]\
+[negative: off]\
+
+[column: left ${table_number}; right ${visitors}名]\
+
+[fixedWidth: text ------------------------------------------------]\
+
+[templateArray: start]
+[column: left ${item_list.name}; right ${item_list.quantity}]
+[templateArray: end]\
+
+[cut: feed; partial]

@@ -1,0 +1,56 @@
+[align: center]\
+[font: a]\
+[image: url https://star-emea.com/wp-content/uploads/2015/01/logo.jpg; width 60%; min-width 48mm]\
+[magnify: width 2; height 2]
+${store_name}\
+
+[plain]\
+[align: left]\
+[column: vl; left Order ${order_number}; right ${time}]
+[column: vl; left Sale for ${sales_type}; right Served by ${server}]\
+
+Transaction #${transaction_id}
+[fixedWidth: text ------------------------------------------------]\
+
+[templateArray: start]
+[column: vl; left ${item_list.quantity%-2d} ${item_list.name}; right ${item_list.unit_price%6.2lf}]
+[templateArray: end]\
+
+[fixedWidth: text ------------------------------------------------]\
+
+[column: vl; left Subtotal; right ${subtotal%6.2lf}]
+[column: vl; left Tax; right ${tax%6.2lf}]
+[bold: on]\
+[column: vl; left Total; right ${total%6.2lf}]\
+[bold: off]\
+
+[fixedWidth: text ------------------------------------------------]\
+
+[column: vl; left ${credit_card_number}; right ${total%6.2lf}]
+[column: vl; left Approval Code; right ${approval_code}]\
+
+[fixedWidth: text ------------------------------------------------]\
+
+[column: vl; left Amount; right ${amount%6.2lf}]
+[column: vl; left Total; right ${total%6.2lf}]\
+
+[fixedWidth: text ------------------------------------------------]\
+
+Signature\
+
+[align: center]\
+
+
+------------------------
+
+${address}
+${tel}
+${mail}
+${url}\
+
+[fixedWidth: text ------------------------------------------------]\
+
+Powered by Star Micronics\
+
+[barcode: type code39; data ${transaction_id}; height 15mm; module 0; hri]\
+[cut: feed; partial]

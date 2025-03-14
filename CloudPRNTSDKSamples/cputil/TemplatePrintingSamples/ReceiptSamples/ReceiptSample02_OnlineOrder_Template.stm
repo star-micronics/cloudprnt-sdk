@@ -1,0 +1,30 @@
+[magnify: width 2; height 2]\
+[bold: on]\
+${store_name}
+${order_number}
+[plain]\
+
+${name}
+[fixedWidth: text ------------------------------------------------]
+[column: vl; left ${date}; right ${time}]
+[fixedWidth: text ------------------------------------------------]\
+
+[align: center]\
+PICKUP ${pickup_time}
+[align: left]\
+[fixedWidth: text ------------------------------------------------]
+
+[templateArray: start]
+[bold: on]\
+${item_list.quantity} x ${item_list.name}
+[bold: off]\
+${item_list.detail}
+[templateArray: end]\
+
+[fixedWidth: text ------------------------------------------------]\
+
+${note}
+[fixedWidth: text ------------------------------------------------]\
+
+[column: vl; left ${footer1}; right ${footer2}]
+[cut: feed; partial]

@@ -1,31 +1,27 @@
 # 1. Overview
 
-This package contains cputil Ver 1.1.2.
-cputil is intented to serve and a useful back-end tool to help with implementing CloudPRNT servers that are not .Net or .Net Core based.
+This package contains cputil Ver 1.2.0.<br>
+cputil is intended to serve and a useful back-end tool to help with implementing CloudPRNT servers that are not .NET or .NET Core based.
 
-cputil can be use on any platform supported by .NET 6.0 including:
+cputil can be use on any platform supported by .NET 8.0 including:
 
-- Windows x86 and x64
-    + cputil-win-x86_v112.zip / cputil-win-x64_v112.zip
+- Windows x64
+    + cputil-win-x64_v120.zip
 - Linux x64
-    + cputil-linux-x64_v112.tar.gz
-- Apple Mac OS (OSX) x64 (Except 10.15 or later)
-    + cputil-osx-x64_v112.tar.gz
-- Apple Mac OS (OSX) x64 (10.15 or later)
-    + cputil-osx-x64_v112.zip
-- Linux Arm (Raspberry PI compatible)
-    + cputil-linux-arm_v112.tar.gz
+    + cputil-linux-x64_v120.tar.gz
+- Apple macOS x64 /arm64 (10.15 or later)
+    + cputil-macos_v120.zip
 
-In all cases, it is possible to build a self contained package that can be run on the desired platform without the need for a .Net Framework or .Net Core installation.
+In all cases, it is possible to build a self contained package that can be run on the desired platform without the need for a .NET Framework or .NET Core installation.
 
-Please refer to SDK documents for details.
-(https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/index.html)
+Please refer to Star CloudPRNT Protocol Guide for details.<br>
+(https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/cputil.html)
 
 
 # 2. Contents
 
 ~~~
-cputil-<Platform Name>_v112.zip(or .tar.gz)
+cputil-<Platform Name>_v120.zip(or .tar.gz)
 |- Readme_En.txt                          // Release Notes (English)
 |- Readme_Jp.txt                          // Release Notes (Japanese)
 |- SoftwareLicenseAgreement.pdf           // Software License Agreement (English)
@@ -33,28 +29,25 @@ cputil-<Platform Name>_v112.zip(or .tar.gz)
 |- SoftwareLicenseAgreementAppendix.pdf   // Software License Agreement Appendix
 |
 +- cputil-<Platform Name>
-    |- cputil(.exe)                        // cputil executable file
+   |- cputil(.exe)                        // cputil executable file
 ~~~
 
 # 3. Scope
 
-cputil can be use on any platform supported by .NET 6.0 including:
+cputil can be use on any platform supported by .NET 8.0 including:
 
-- Windows x86 and x64
-    + cputil-win-x86_v112.zip / cputil-win-x64_v112.zip
+- Windows x64
+    + cputil-win-x64_v120.zip
 - Linux x64
-    + cputil-linux-x64_v112.tar.gz
-- Apple Mac OS (OSX) x64 (Except 10.15 or later)
-    + cputil-osx-x64_v112.tar.gz
-- Apple Mac OS (OSX) x64 (10.15 or later)
-    + cputil-osx-x64_v112.zip
-- Linux Arm (Raspberry PI compatible)
-    + cputil-linux-arm_v112.tar.gz
+    + cputil-linux-x64_v120.tar.gz
+- Apple macOS x64 / arm64 (10.15 or later)
+    + cputil-macos_v120.zip
 
 Works with these CloudPRNT client printers:
 
 - mC-Print2
 - mC-Print3
+- mC-Label3 / TSP100IV SK
 - TSP100IV
 - TSP650II with IFBD-HI01X
 - TSP700II with IFBD-HI01X
@@ -62,16 +55,16 @@ Works with these CloudPRNT client printers:
 - TSP650IISK with IFBD-HI01X(V1.9.0 or later)
 - SP700 with IFBD-HI02X
 
-Please refer to each CloudPRNT client printer for details.
-You can download the manual from Star web site.
-(https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/developerguide/introduction.html)
+Please refer to each CloudPRNT client printer for details.<br>
+You can check the Star CloudPRNT Protocol Guide.<br>
+(https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/index.html)
 
 # 4. Usage Example
 
 The example of usages for cputil are like below.
 
-And it also can be refer to SDK documents for details.
-(https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/cputil/cputil_usage.html)
+And it also can be refer to Star CloudPRNT Protocol Guide for details.<br>
+(https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/cputil.html)
 
 ## Installation
 
@@ -82,11 +75,7 @@ The below operation is to test this "Usage Example". Please open the terminal or
 
 - Windows
     ~~~ console
-    > cd <Extracted Directory Path>\cputil-win-x64_v112\cputil-win-x64
-    ~~~
-    or
-    ~~~ console
-    > cd <Extracted Directory Path>\cputil-win-x86_v112\cputil-win-x86
+    > cd <Extracted Directory Path>\cputil-win-x64_v120\cputil-win-x64
     ~~~
 
 - Linux
@@ -96,11 +85,11 @@ The below operation is to test this "Usage Example". Please open the terminal or
 
 - macOS
     ~~~ console
-    $ cd <Extracted Directory Path>/cputil-osx-x64
+    $ cd <Extracted Directory Path>/cputil-macos
     ~~~
 
 Notes:
-On macOS 10.15 or later, cputil will be installed by Star provided pkg installer.
+On macOS 10.15 or later, cputil will be installed by Star provided pkg installer.<br>
 Therefore just input "cputil" is enough when perform cputil command on terminal for below example(No need "./").
 
 ## Decoding Star ASB Status
@@ -146,8 +135,8 @@ will generate the output:
 
 ## Handling Print Job media formats
 
-cputil can help with key parts of the CloudPRNT printing process. 
-A server can prepare a print job in a single input format, which may not be natively supported by the \cloudPRNT client device. 
+cputil can help with key parts of the CloudPRNT printing process. <br>
+A server can prepare a print job in a single input format, which may not be natively supported by the \cloudPRNT client device. <br>
 The server can then use cputil to convert the job, as needed to a format that the CloudPRNT client does support.
 
 Supported input print job media formats are:
@@ -201,8 +190,8 @@ which will generate the JSON ready output:
 
 ## Converting a job for printing
 
-After a server has provided a JSON response to the CloudPRNT poll with the jobReady field set to true, and a valid mediaTypes list, the client will recognise that it is there is a job for it to print. 
-It will perfom the following steps:
+After a server has provided a JSON response to the CloudPRNT poll with the jobReady field set to true, and a valid mediaTypes list, the client will recognise that it is there is a job for it to print. <br>
+It will perform the following steps:
 
 - select its preferred mediaType, from those available in the list. This is typically selected based on the first format in the list which is supported by the client. However, the exact decision can be client specific.
 - perform an http GET to the CloudPRNT server to retrieve the job, specifying the chosen mediaType through a query string parameter.
@@ -247,8 +236,8 @@ And this outputdata.bin can print on the starprnt emulation printer(mC-Print2/3)
 
 ## Conversion options
 
-Conversion can include image scaling or cropping and dithering.
-For scaling and cropping to work, it is necessary to inform cputil of the printer print width.
+Conversion can include image scaling or cropping and dithering.<br>
+For scaling and cropping to work, it is necessary to inform cputil of the printer print width.<br>
 CloudPRNT servers can obtain this information through the CloudPRNT clientAction "PageInfo" request.
 
 To specify the print area size, use one of the following options:
@@ -309,9 +298,9 @@ It is possible to ask cputil to include commands to trigger a printer connected 
 - `buzzer-end X` (X is numeric)
     + Ring a buzzer by specified times at the end of the print job.
 
-[Notes]
-Certain output data formats do not support embeding device commands, such as text/plain, image/png, image/jpeg.
-In these cases it is possible to use the CloudPRNT protocol to request that a cash drawer is opened via the http print job response header.
+[Notes]<br>
+Certain output data formats do not support embeding device commands, such as text/plain, image/png, image/jpeg.<br>
+In these cases it is possible to use the CloudPRNT protocol to request that a cash drawer is opened via the http print job response header.<br>
 Alternatively, ensure that your CloudPRNT service uses device command print job formats.
 
 For example, to prepare print data as StarPRNT commands for a 2 inch printer from a PNG source, with cashdrawer open(2inch) and buzzer ring at the end of job: 
@@ -344,9 +333,9 @@ For example, to prepare print data as StarPRNT commands for a 2 inch printer fro
 
 To enable a hold print feature
 
-This feature is available with TSP650IISK and IFBD-HI01X (Ver 1.9.0 or later).
-TSP650IISK has hold print feature which can be detected if remains a printed receipt at paper exit.
-The below options can be specified whehter informs hold print status / enable hold print firmware control (These settings are actually affects after sending current job (from next time print job)).
+This feature is available with TSP650IISK and IFBD-HI01X (Ver 1.9.0 or later).<br>
+TSP650IISK has hold print feature which can be detected if remains a printed receipt at paper exit.<br>
+The below options can be specified whether informs hold print status / enable hold print firmware control (These settings are actually affects after sending current job (from next time print job)).
 
 - `presentstatus-default`
     + Follows printer firmware setting about the informing of hold print status.
@@ -390,16 +379,16 @@ For example, to prepare print data as StarPRNT commands for a 2 inch printer fro
         $ ./cputil thermal3 scale-to-fit presentstatus-valid holdprint-invalid decode "application/vnd.star.starprnt" sourceimage.png outputdata_3.bin
         ~~~
 
-[Notes]
-About holdpirnt-XXX options, this option is recommended to set invalid when use software solutions(like CloudPRNT) supporting TSP650IISK feature. 
-Because these softwares controls the hold print feature by hold print status.  
-Certain output data formats do not support embeding device commands, such as text/plain, image/png, image/jpeg.
-In these cases it is possible to use the CloudPRNT protocol to request that a cash drawer is opened via the http print job response header.
+[Notes]<br>
+About holdpirnt-XXX options, this option is recommended to set invalid when use software solutions(like CloudPRNT) supporting TSP650IISK feature. Because these softwares controls the hold print feature by hold print status.<br>
+Certain output data formats do not support embeding device commands, such as text/plain, image/png, image/jpeg.<br>
+In these cases it is possible to use the CloudPRNT protocol to request that a cash drawer is opened via the http print job response header.<br>
 Alternatively, ensure that your CloudPRNT service uses device command print job formats.
+
 
 # 5. Limitation
 
-1. Word wrapping / column command for starmarkup features with Unicode character are only supported by mC-Print2 / mC-Print3 / TSP650II.
+1. Word wrapping / column command for starmarkup features with Unicode character are only supported by mC-Print2 / mC-Print3 / mC-Label3 / TSP100IV / TSP100IV SK / TSP650II.
 
 
 # 6. OSS Licenses
@@ -415,9 +404,21 @@ cputil package includes these libraries which is included OSS licenses.
 
 # 7. Copyright
 
-Copyright 2019 Star Micronics Co., Ltd. All rights reserved.
+Copyright 2020 Star Micronics Co., Ltd. All rights reserved.
 
 # 8. Release History
+
+- Ver 1.2.0 (2025/03/10)
+    + Support the command option of [-template] for [decode] command : for template printing function.
+    + Update the SixLabors.ImageSharp library from V1.0.4 to V2.1.9.
+    + Update the .NET framework from .NET 6.0 to .NET 8.0.
+    + Support the following Star Document Markup tags.
+      - [buzzer]
+      - [drawer]
+      - [fixedWidth]
+      - [linespacing]
+      - [templateArray]
+    + Support the `variable-left` option of [column] Star Document Markup tag.
 
 - Ver 1.1.2 (2022/04/28)
     + Update the SixLabors.ImageSharp library from V1.0.2 to V1.0.4 to support .NET 6.0 environment.

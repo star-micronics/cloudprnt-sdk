@@ -64,14 +64,28 @@ namespace cputil
 
                         string format = args[++i];
                         string filename = args[++i];
-                        string outputfile = args[++i];
+                        string outputFile = args[++i];
+                        string fieldData = String.Empty;
+
+                        try
+                        {
+                            if (args.Length >= i + 2 && args[++i] == "-template")
+                            {
+                                fieldData = args[++i];
+                            }
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            PrintHelp();
+                            break;
+                        }
 
                         Stream s = null;
 
-                        if (outputfile == "-" || outputfile == "" || outputfile == "[stdout]")
+                        if (outputFile == "-" || outputFile == "" || outputFile == "[stdout]")
                             s = Console.OpenStandardOutput();
                         else
-                            s = new FileStream(outputfile, FileMode.Create);
+                            s = new FileStream(outputFile, FileMode.Create);
 
                         if (format.Equals("application/vnd.star.linematrix"))
                         {
@@ -80,10 +94,20 @@ namespace cputil
                         }
 
                         //decode(format, filename, s);
-                        Document.ConvertFile(filename, s, format, opts);
+                        if (fieldData == String.Empty)  
+                        {
+                            Document.ConvertFile(filename, s, format, opts);
+                        }
+                        else // Optional : ApplyTemplate
+                        {
+                            // Input : Template data file (Star Document Markup) and Field data (JSON)
+                            // Output: Replaced and Converted to target format
+                            Document.ConvertFileWithApplyTemplate(filename, fieldData, s, format, opts);
+                        }
+
                         s.Close();
 
-                        Console.Error.WriteLine(String.Format("Wrote output to \"{0}\"", outputfile));
+                        Console.Error.WriteLine(String.Format("Wrote output to \"{0}\"", outputFile));
                         break;
 
                     case "printarea":
@@ -267,7 +291,15 @@ namespace cputil
                 "                                        \"image/png\" or \"application/vnd.star.markup\".",
                 "  decode <format> <filename> <output> - Convert file to the specified format. Format should",
                 "                                        be provides as a media type string.",
-                "                                        decoder data is writtenn to the file specified by",
+                "                                        decoder data is written to the file specified by",
+                "                                        <output>. If output is set to \"-\" or \"[stdout]\"",
+                "                                        then data will be written to standard output.",
+                "  decode <format> <templateFilename> <output> -template <fieldDataFilename>",
+                "                                      - Generates Star Document Markup data by combining a template, ",
+                "                                        which defines a print layout, and field data.",
+                "                                        Then convert the data to the specified format.",
+                "                                        Format should be provides as a media type string.",
+                "                                        decoder data is written to the file specified by",
                 "                                        <output>. If output is set to \"-\" or \"[stdout]\"",
                 "                                        then data will be written to standard output.",
                 "  thermal2/thermal58                  - set device constraints for a thermal 58mm/2\" printer",

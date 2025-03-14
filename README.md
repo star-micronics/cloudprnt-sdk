@@ -26,22 +26,26 @@ For integration purposes, the SDK provides the following:
 <a id=".Net-API"></a>
 
 - **.NET API** <br>
-A .Net Standard 2.0 compatible library, which can be installed via NuGet into .NET Framework 4.6.1 or later, and .NET Core 2.0 or later project. This API provides job format conversion, status decoding, and ready made classes for serializing/de-serializing CloudPRNT JSON messages.<br>
-For more details, please refer our [Online Manual](https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/api-guide.html).
+This is a .NET Standard 2.0-compatible library that can be installed via NuGet on projects with .NET Framework 4.7.2 or later or .NET Core 3.1 or later.<br>
+This API provides ready-made classes that convert the print job format, decode the status, and serialize or deserialize CloudPRNT JSON messages.<br>
+For more details, please refer to our [Online Manual](https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/api-guide.html).
 
 - **cputil** ([CloudPRNTSDKSamples](CloudPRNTSDKSamples)) <br>
-CPUtil is a useful back-end tool to help with implementing CloudPRNT servers that are not .NET framework or .NET Core-based.
-Since its source code is published, server developers can implement necessary functions by freely modifying CPUtil as necessary.<br>
-A stand-alone command line tool that can be integrated with any server-side development system that can invoke local processes. This tool can be provided as native binaries for Linux x86, Linux x64, Linux Arm, Mac OS x64, Windows x86 and Windows x64 servers (it is not necessary to install the .Net Framework or .Net Core runtime). environments in order to use it. And this tool uses the [.NET API](#.Net-API).
+This is a standalone command line tool to integrate with a server development system that invokes local processes.<br>
+This tool can be provided as native binaries for servers such as Linux x64, macOS (arm64/x64), and Windows x64 (it is not necessary to install the .NET Framework or .NET runtime). And this tool uses the [.NET API](#.Net-API).
 
 - **Star Document Markup** <br>
-A simple, unified printer markup language that can adapt to any Star printer regardless of emulation, print width, or print method. It is a higher level language that abstracts away the need to know printer-specific escape sequences. It does this by providing easy to use tags for various POS printer functions such as cut, alignment, image printing, and text formatting. Using the document markup system provides a balance between full bit-image based printing, and plain text output, while being easier to use than printer-specific commands. In order to take advantage of the markup language you must use it in conjunction with cputil.<br>
-For more details, please refer our [Online Manual](https://star-m.jp/products/s_print/sdk/StarDocumentMarkup/manual/en/index.html).
+This is a simple printer markup language adaptable to any Star printer regardless of emulation, print width, or print method.<br>
+Without deep knowledge of a printer-specific command, you can enable various POS printer functions, such as cut, alignment, image printing, and text formatting, using easy-to-understand tags. While Star Document Markup is easier to use than creating a print job configuration only with printer-specific commands, it provides a balance between full bit image-based printing and plain text output.<br>
+Note that Star Document Markup must be used together with .NET API or CPUtil.<br>
+For more details, please refer to our [Online Manual](https://star-m.jp/products/s_print/sdk/StarDocumentMarkup/manual/en/index.html) for Star Document Markup.<br>
+For samples of the [Template Printing Function](https://star-m.jp/products/s_print/sdk/StarDocumentMarkup/manual/en/template.html) using Star Document Markup, please refer to [TemplatePrintingSamples](CloudPRNTSDKSamples/cputil/TemplatePrintingSamples).
+
 
 - **Sample Projects** ([ExampleServers](ExampleServers)) <br>
-Examples of very simple CloudPRNT servers. The sample serves as the examples of implementing the CloudPRNT protocol and how to integrate either the cputil.
+These simple CloudPRNT server samples introduce CloudPRNT protocol implementation and CPUtil integration examples.
 
 
 ## Copyright
 
-Copyright 2019 Star Micronics Co., Ltd. All rights reserved.
+Copyright 2020 Star Micronics Co., Ltd. All rights reserved.

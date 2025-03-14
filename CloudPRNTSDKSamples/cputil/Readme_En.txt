@@ -1,5 +1,5 @@
 ************************************************************
-      cputil Ver 1.1.2                           28/04/2022
+      cputil Ver 1.2.0                           10/03/2025
          Readme_En.txt             Star Micronics Co., Ltd.
 ************************************************************
 
@@ -16,29 +16,27 @@
  1. Overview
 =============
 
-    This package contains cputil Ver 1.1.2.
+    This package contains cputil Ver 1.2.0.
     cputil is intented to serve and a useful back-end tool to help
     with implementing CloudPRNT servers that are not .NET or .NET Core based.
 
-    cputil can be use on any platform supported by .NET 6.0 including:
-      - Windows x86 and x64                             ... cputil-win-x86_v112.zip / cputil-win-x64_v112.zip
-      - Linux x64                                       ... cputil-linux-x64_v112.tar.gz
-      - Apple Mac OS (OSX) x64 (Except 10.15 or later)  ... cputil-osx-x64_v112.tar.gz
-      - Apple Mac OS (OSX) x64 (10.15 or later)         ... cputil-osx-x64_v112.zip
-      - Linux Arm (Raspberry PI compatible)             ... cputil-linux-arm_v112.tar.gz
+    cputil can be use on any platform supported by .NET 8.0 including:
+      - Windows x64                              ... cputil-win-x64_v120.zip
+      - Linux x64                                ... cputil-linux-x64_v120.tar.gz
+      - Apple macOS x64 /arm64 (10.15 or later)  ... cputil-macos_v120.zip
 
     In all cases, it is possible to build a self contained package that can be
     run on the desired platform without the need for a .NET Framework or .NET Core
     installation.
 
-    Please refer to SDK documents for details.
-    (https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/index.html)
+    Please refer to Star CloudPRNT Protocol Guide for details.
+    (https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/cputil.html)
 
 =============
  2. Contents
 =============
 
-    cputil-<Platform Name>_v112.zip(or .tar.gz)
+    cputil-<Platform Name>_v120.zip(or .tar.gz)
     |- Readme_En.txt                          // Release Notes (English)
     |- Readme_Jp.txt                          // Release Notes (Japanese)
     |- SoftwareLicenseAgreement.pdf           // Software License Agreement (English)
@@ -51,16 +49,15 @@
 ==========
  3. Scope
 ==========
-    cputil can be use on any platform supported by .NET 6.0 including:
-      - Windows x86 and x64                             ... cputil-win-x86_v112.zip / cputil-win-x64_v112.zip
-      - Linux x64                                       ... cputil-linux-x64_v112.tar.gz
-      - Apple Mac OS (OSX) x64 (Except 10.15 or later)  ... cputil-osx-x64_v112.tar.gz
-      - Apple Mac OS (OSX) x64 (10.15 or later)         ... cputil-osx-x64_v112.zip
-      - Linux Arm (Raspberry PI compatible)             ... cputil-linux-arm_v112.tar.gz
+    cputil can be use on any platform supported by .NET 8.0 including:
+      - Windows x64                               ... cputil-win-x64_v120.zip
+      - Linux x64                                 ... cputil-linux-x64_v120.tar.gz
+      - Apple macOS x64 / arm64 (10.15 or later)  ... cputil-macos_v120.zip
 
     Works with these CloudPRNT client printers:
         - mC-Print2
         - mC-Print3
+        - mC-Label3 / TSP100IV SK
         - TSP100IV
         - TSP650II with IFBD-HI01X
         - TSP700II with IFBD-HI01X
@@ -69,8 +66,8 @@
         - SP700 with IFBD-HI02X
 
         Please refer to each CloudPRNT client printer for details.
-        You can check the manual from Star web site.
-        (https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/developerguide/introduction.html)
+        You can check the Star CloudPRNT Protocol Guide.
+        (https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/index.html)
 
 ==================
  4. Usage Example
@@ -78,8 +75,8 @@
 
     The example of usages for cputil are like below.
 
-    And it also can be refer to SDK documents for details.
-    (https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/cputil/cputil_usage.html)
+    And it also can be refer to Star CloudPRNT Protocol Guide for details.
+    (https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/en/cputil.html)
 
     ### Installation
     Please unzip/extract cputil-<Platform Name>.zip(or .tar.gz) to any specified path on PC.
@@ -89,15 +86,13 @@
     Please open the terminal or command prompt on each PC and perform following command.
 
     [Windows]
-    > cd <Extracted Directory Path>\cputil-win-x64_v112\cputil-win-x64
-    or    
-    > cd <Extracted Directory Path>\cputil-win-x86_v112\cputil-win-x86
+    > cd <Extracted Directory Path>\cputil-win-x64_v120\cputil-win-x64
 
     [Linux]
     $ cd <Extracted Directory Path>/cputil-linux-x64
 
     [macOS]
-    $ cd <Extracted Directory Path>/cputil-osx-x64
+    $ cd <Extracted Directory Path>/cputil-macos
 
     Notes:
         On macOS 10.15 or later, cputil will be installed by Star provided pkg installer.
@@ -354,7 +349,7 @@
 ===============
 
     1. Word wrapping / column command for starmarkup features with Unicode character are only supported 
-       by mC-Print2 / mC-Print3 / TSP650II.
+       by mC-Print2 / mC-Print3 / mC-Label3 / TSP100IV / TSP100IV SK / TSP650II.
 
 =================
  6. OSS Licenses
@@ -375,6 +370,19 @@
  8. Release History
 ====================
 
+    Ver 1.2.0
+    2025/03/10:
+        Support the command option of [-template] for [decode] command : for template printing function.
+        Update the SixLabors.ImageSharp library from V1.0.4 to V2.1.9.
+        Update the .NET framework from .NET 6.0 to .NET 8.0.
+        Support the following Star Document Markup tags.
+          - [buzzer]
+          - [drawer]
+          - [fixedWidth]
+          - [linespacing]
+          - [templateArray]
+        Support the `variable-left` option of [column] Star Document Markup tag. 
+        
     Ver 1.1.2
     2022/04/28:
         Update the SixLabors.ImageSharp library from V1.0.2 to V1.0.4 to support .NET 6.0 environment.

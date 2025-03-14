@@ -1,5 +1,5 @@
 ************************************************************
-      cputil Ver 1.1.2                           2022/04/28
+      cputil Ver 1.2.0                           2025/03/10
          Readme_Jp.txt                  スター精密（株）
 ************************************************************
 
@@ -16,32 +16,30 @@
  1. 概要
 ==========
 
-    本パッケージは、cputil V1.1.2 です。
+    本パッケージは、cputil V1.2.0 です。
     cputil は、.NET Frameworkまたは .NET Core ベースではない CloudPRNTサーバーの実装に役立つ
     便利なバックエンド ツールとして機能することを目的としています。
 
-    cputilは、.NET 6.0を用いて実装しております。
+    cputilは、.NET 8.0を用いて実装しております。
 
     このため、
-  　  .NET 6.0に対応したプラットフォームで利用出来ます。
+  　  .NET 8.0に対応したプラットフォームで利用出来ます。
     　cputilを利用するPCにて、.NET Frameworkのインストールは不要です。
 
     具体的にcputilを利用できるプラットフォームは以下の通りです。
-       - Windows x86 and x64                             ... cputil-win-x86_v112.zip / cputil-win-x64_v112.zip
-       - Linux x64                                       ... cputil-linux-x64_v112.tar.gz
-       - Apple Mac OS (OSX) x64 (10.15以降を除く)        ... cputil-osx-x64_v112.tar.gz
-       - Apple Mac OS (OSX) x64 (10.15以降)              ... cputil-osx-x64_v112.zip
-       - Linux Arm (Raspberry PI compatible)             ... cputil-linux-arm_v112.tar.gz
+       - Windows x64                         ... cputil-win-x64_v120.zip
+       - Linux x64                           ... cputil-linux-x64_v120.tar.gz
+       - Apple macOS x64 /arm64 (10.15以降)  ... cputil-macos_v120.zip
 
-    詳細な説明は、SDKドキュメントファイルを参照ください。
-    (https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/ja/index.html)
+    詳細な説明は、Star CloudPRNT プロトコルガイドを参照ください。
+    (https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/ja/cputil.html)
 
 
 ==========
  2. 内容
 ==========
 
-    cputil-<Platform Name>_v112.zip(or .tar.gz)
+    cputil-<Platform Name>_v120.zip(or .tar.gz)
     |- Readme_En.txt                          // リリースノート (英語)
     |- Readme_Jp.txt                          // リリースノート (日本語)
     |- SoftwareLicenseAgreement.pdf           // ソフトウエア使用許諾書 (英語)
@@ -56,12 +54,10 @@
  3. 適用
 ==========
 
-    本ソフトウェアは現在、.NET Core 6.0 によってサポートされるプラットフォームに対応しています。
-      - Windows x86 and x64                             ... cputil-win-x86_v112.zip / cputil-win-x64_v112.zip
-      - Linux x64                                       ... cputil-linux-x64_v112.tar.gz
-      - Apple Mac OS (OSX) x64 (10.15以降を除く)        ... cputil-osx-x64_v112.tar.gz
-      - Apple Mac OS (OSX) x64 (10.15以降)              ... cputil-osx-x64_v112.zip
-      - Linux Arm (Raspberry PI compatible)             ... cputil-linux-arm_v112.tar.gz
+    本ソフトウェアは現在、.NET Core 8.0 によってサポートされるプラットフォームに対応しています。
+      - Windows x64                         ... cputil-win-x64_v120.zip
+      - Linux x64                           ... cputil-linux-x64_v120.tar.gz
+      - Apple macOS x64 /arm64 (10.15以降)  ... cputil-macos_v120.zip
 
     いずれの場合も、自己完結型パッケージにてビルドされており、
     .NET Framework または .NET Core のインストールを必要とせずに目的のプラットフォームで実行できます。
@@ -69,10 +65,11 @@
     また、下記のCloudPRNTクライアント対応プリンタを対象としています。:
         - mC-Print2
         - mC-Print3
-        - TSP100IV
+        - mC-Label3
+        - TSP100IV / TSP100IV SK
 
-    CloudPRNTについての詳細は、SDKドキュメントファイルを参照ください。
-    (https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/ja/developerguide/introduction.html)
+    CloudPRNTについての詳細は、Star CloudPRNT プロトコルガイドを参照ください。
+    (https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/ja/index.html)
 
 
 ===============
@@ -80,11 +77,11 @@
 ===============
     cputilの使用例は以下になります。
 
-    また、詳細な説明はSDKドキュメントファイルを参照してください。
-    (https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/ja/articles/cputil/cputil_usage.html)
+    また、詳細な説明はStar CloudPRNT プロトコルガイドを参照してください。
+    (https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/ja/cputil.html)
 
     ### インストレーション
-    PC 上の任意のパスに cputil-<プラットフォーム名>_v112.zip(または .tar.gz)を解凍してください。
+    PC 上の任意のパスに cputil-<プラットフォーム名>_v120.zip(または .tar.gz)を解凍してください。
     (インストール場所と方法は、PC/サーバー管理者が任意で選択できます)
 
     以下の操作は、本使用例をテストするために実施します。
@@ -93,15 +90,13 @@
     また起動後、次のコマンドを実行してください。
 
     [Windows]
-    > cd <Extracted Directory Path>\cputil-win-x64_v112\cputil-win-x64
-    or    
-    > cd <Extracted Directory Path>\cputil-win-x86_v112\cputil-win-x86
+    > cd <Extracted Directory Path>\cputil-win-x64_v120\cputil-win-x64
 
     [Linux]
     $ cd <Extracted Directory Path>/cputil-linux-x64
 
     [macOS]
-    $ cd <Extracted Directory Path>/cputil-osx-x64
+    $ cd <Extracted Directory Path>/cputil-macos
 
     備考：
     macOS 10.15以降では、cputilはStarが提供するpkgイントーラーによってインストールされます。
@@ -178,7 +173,7 @@
     mediaTypes リストを準備できます。
 
     例えば、PNG イメージを印刷ジョブソースとして使用するサーバーの場合は次のコマンドを利用してください。
-    (この例では sourceimage.png は入力ファイル名です。当該ファイルを準備しcputil実行可能ファイルと同じディレクトリに配置してください）
+    （この例では sourceimage.png は入力ファイル名です。当該ファイルを準備しcputil実行可能ファイルと同じディレクトリに配置してください）
 
     コマンド例：
     [Windows]
@@ -340,9 +335,22 @@
  8. 変更履歴
 =============
 
+    Ver 1.2.0
+    2025/03/10:
+        「decode」コマンド : 「-template」コマンドオプションによりテンプレート印刷機能をサポート
+        .NET フレームワークを.NET 6.0から.NET 8.0へ更新
+        画像処理のためのSixLabors.ImageSharpライブラリをV1.0.4からV2.1.9へ更新
+        以下のStarドキュメントマークアップタグをサポート
+          - [buzzer]
+          - [drawer]
+          - [fixedWidth]
+          - [linespacing]
+          - [templateArray]
+        Starドキュメントマークアップタグ [column] variable-leftオプションをサポート
+
     Ver 1.1.2
     2022/04/28:
-      　 SixLabors.ImageSharpライブラリを.NET 6.0環境に対応するためV1.0.2からV1.0.4へ更新
+      　SixLabors.ImageSharpライブラリを.NET 6.0環境に対応するためV1.0.2からV1.0.4へ更新
         Newtonsoft.JsonライブラリをV12.0.3からV13.0.1へ更新
         .NET フレームワークを.NET Core 3.1から .NET 6.0へ更新
 

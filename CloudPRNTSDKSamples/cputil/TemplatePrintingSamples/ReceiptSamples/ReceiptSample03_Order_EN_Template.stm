@@ -1,0 +1,25 @@
+[align: center] [magnify: width 2; height 2]\
+${header}
+[bold: on] [negative: on]\
+[sp: c 4] ${title} [sp: c 4]
+[align: left ][plain]\
+
+[column: left #${number}; right ${datetime}]\
+
+[bold: on]\
+[column: left ${store_name}; right ${order_number}]\
+[bold: off]\
+
+${customer_name}
+
+[fixedWidth: text ------------------------------------------------]\
+
+[column: left # Item; right Cst.#]\
+
+[templateArray: start]
+[column: left ${item_list.quantity%-2d} ${item_list.name}; right ${item_list.cost}]
+[templateArray: end]\
+
+[fixedWidth: text ------------------------------------------------]\
+
+[cut: feed; partial]
