@@ -1,17 +1,21 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using StarMicronics.CloudPrnt;
+using StarMicronics.StarDocumentMarkup;
 
 using Newtonsoft.Json;
+
 
 namespace cputil
 {
     class Program
     {
         static ConversionOptions opts = new ConversionOptions();
-        
+
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(PrinterStatus))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(PrinterStatusDetail))]
         static void Main(string[] args)
         {
             opts.JobEndCutType = CutType.Full;
@@ -232,6 +236,16 @@ namespace cputil
                         opts.DeviceWidth = 832;
                         break;
 
+                    case "300dpi":
+                        opts.HorizontalResolution = (float)11.81;
+                        opts.VerticalResolution = (float)11.81;
+                        break;
+
+                    case "text-magnification-1_5x":
+                    case "text-mag-1_5x":
+                        opts.BaseMagnificationType.Text = BaseMagnification.X1_5;
+                        break;
+
                     case "utf8":
                         opts.SupportUTF8 = true;
                         break;
@@ -310,6 +324,9 @@ namespace cputil
                 "  matrix69.5                          - set device constraints for a dot-matrix 69.5mm\" printer",
                 "  matrix3/matrix76                    - set device constraints for a dot-matrix 76mm/3\" printer",
                 "  printarea <dot length>              - set device constraints for a specified printable area dot size of printer",
+                "  300dpi                              - set device constraints for a 300dpi printer",
+                "  text-magnification-1_5x / text-mag-1_5x",
+                "                                      - specify that text magnification 1.5x (for 300dpi printer)",
                 "  utf8                                - specify that the target device supports UTF8 encoding (default)",
                 "  sbcs                                - specify that the target device supports only single byte codepages",
                 "  dither                              - specify that colour/greyscale images should be ditherer",
@@ -355,11 +372,17 @@ namespace cputil
 
         static void DisplayInfo()
         {
-            Assembly a = typeof(StarMicronics.CloudPrnt.Document).Assembly;
-            AssemblyName n = a.GetName();
-            Version v = n.Version;
+            Assembly asmSDMU = typeof(StarMicronics.StarDocumentMarkup.Document).Assembly;
+            AssemblyName nameSDMU = asmSDMU.GetName();
+            Version versionSDMU = nameSDMU.Version;
             
-            Console.WriteLine("{0}: {1}.{2}.{3}.{4}", n.Name, v.Major, v.Minor, v.Build, v.Revision);
+            Console.WriteLine("{0}: {1}.{2}.{3}.{4}", nameSDMU.Name, versionSDMU.Major, versionSDMU.Minor, versionSDMU.Build, versionSDMU.Revision);
+
+            Assembly asmCP = typeof(StarMicronics.CloudPrnt.PrinterStatus).Assembly;
+            AssemblyName nameCP = asmCP.GetName();
+            Version versionCP = nameCP.Version;
+
+            Console.WriteLine("{0}: {1}.{2}.{3}.{4}", nameCP.Name, versionCP.Major, versionCP.Minor, versionCP.Build, versionCP.Revision);
 
             AssemblyName cn = Assembly.GetExecutingAssembly().GetName();
             Version cv = cn.Version;
@@ -384,7 +407,7 @@ namespace cputil
         {
             PrinterStatus stat = new PrinterStatus(status);
 
-            return JsonConvert.SerializeObject(stat, Formatting.Indented);
+            return JsonConvert.SerializeObject(stat, Formatting.Indented, new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
         static string GetOutputMediatTypes(string filename)

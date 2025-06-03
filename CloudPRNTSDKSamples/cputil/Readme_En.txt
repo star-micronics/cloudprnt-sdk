@@ -1,5 +1,5 @@
 ************************************************************
-      cputil Ver 1.2.0                           10/03/2025
+      cputil Ver 2.0.0                           19/05/2025
          Readme_En.txt             Star Micronics Co., Ltd.
 ************************************************************
 
@@ -16,14 +16,14 @@
  1. Overview
 =============
 
-    This package contains cputil Ver 1.2.0.
+    This package contains cputil Ver 2.0.0.
     cputil is intented to serve and a useful back-end tool to help
     with implementing CloudPRNT servers that are not .NET or .NET Core based.
 
     cputil can be use on any platform supported by .NET 8.0 including:
-      - Windows x64                              ... cputil-win-x64_v120.zip
-      - Linux x64                                ... cputil-linux-x64_v120.tar.gz
-      - Apple macOS x64 /arm64 (10.15 or later)  ... cputil-macos_v120.zip
+      - Windows x64                              ... cputil-win-x64_v200.zip
+      - Linux x64                                ... cputil-linux-x64_v200.tar.gz
+      - Apple macOS x64 /arm64 (10.15 or later)  ... cputil-macos_v200.zip
 
     In all cases, it is possible to build a self contained package that can be
     run on the desired platform without the need for a .NET Framework or .NET Core
@@ -36,7 +36,7 @@
  2. Contents
 =============
 
-    cputil-<Platform Name>_v120.zip(or .tar.gz)
+    cputil-<Platform Name>_v200.zip(or .tar.gz)
     |- Readme_En.txt                          // Release Notes (English)
     |- Readme_Jp.txt                          // Release Notes (Japanese)
     |- SoftwareLicenseAgreement.pdf           // Software License Agreement (English)
@@ -50,15 +50,16 @@
  3. Scope
 ==========
     cputil can be use on any platform supported by .NET 8.0 including:
-      - Windows x64                               ... cputil-win-x64_v120.zip
-      - Linux x64                                 ... cputil-linux-x64_v120.tar.gz
-      - Apple macOS x64 / arm64 (10.15 or later)  ... cputil-macos_v120.zip
+      - Windows x64                               ... cputil-win-x64_v200.zip
+      - Linux x64                                 ... cputil-linux-x64_v200.tar.gz
+      - Apple macOS x64 / arm64 (10.15 or later)  ... cputil-macos_v200.zip
 
     Works with these CloudPRNT client printers:
         - mC-Print2
         - mC-Print3
-        - mC-Label3 / TSP100IV SK
-        - TSP100IV
+        - mC-Label2
+        - mC-Label3
+        - TSP100IV / TSP100IV SK
         - TSP650II with IFBD-HI01X
         - TSP700II with IFBD-HI01X
         - TSP800II with IFBD-HI01X
@@ -86,7 +87,7 @@
     Please open the terminal or command prompt on each PC and perform following command.
 
     [Windows]
-    > cd <Extracted Directory Path>\cputil-win-x64_v120\cputil-win-x64
+    > cd <Extracted Directory Path>\cputil-win-x64_v200\cputil-win-x64
 
     [Linux]
     $ cd <Extracted Directory Path>/cputil-linux-x64
@@ -349,7 +350,7 @@
 ===============
 
     1. Word wrapping / column command for starmarkup features with Unicode character are only supported 
-       by mC-Print2 / mC-Print3 / mC-Label3 / TSP100IV / TSP100IV SK / TSP650II.
+       by mC-Print2 / mC-Print3 / mC-Label2 / mC-Label3 / TSP100IV / TSP100IV SK / TSP650II.
 
 =================
  6. OSS Licenses
@@ -369,6 +370,14 @@
 ====================
  8. Release History
 ====================
+
+    Ver 2.0.0
+    2025/05/19:
+        Support the following command option.
+         - 300dpi
+         - text-mag-1_5x
+        Bug Fix
+         - Fixed a problem that could cause unintended printing results when an image containing transparency information is input.
 
     Ver 1.2.0
     2025/03/10:
