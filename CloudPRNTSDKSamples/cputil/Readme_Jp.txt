@@ -1,5 +1,5 @@
 ************************************************************
-      cputil Ver 2.0.0                           2025/05/19
+      cputil Ver 2.0.1                           2025/08/27
          Readme_Jp.txt                  スター精密（株）
 ************************************************************
 
@@ -16,7 +16,7 @@
  1. 概要
 ==========
 
-    本パッケージは、cputil V2.0.0 です。
+    本パッケージは、cputil V2.0.1 です。
     cputil は、.NET Frameworkまたは .NET Core ベースではない CloudPRNTサーバーの実装に役立つ
     便利なバックエンド ツールとして機能することを目的としています。
 
@@ -27,9 +27,9 @@
     　cputilを利用するPCにて、.NET Frameworkのインストールは不要です。
 
     具体的にcputilを利用できるプラットフォームは以下の通りです。
-       - Windows x64                         ... cputil-win-x64_v200.zip
-       - Linux x64                           ... cputil-linux-x64_v200.tar.gz
-       - Apple macOS x64 /arm64 (10.15以降)  ... cputil-macos_v200.zip
+       - Windows x64                         ... cputil-win-x64_v201.zip
+       - Linux x64                           ... cputil-linux-x64_v201.tar.gz
+       - Apple macOS x64 /arm64 (10.15以降)  ... cputil-macos_v201. zip
 
     詳細な説明は、Star CloudPRNT プロトコルガイドを参照ください。
     (https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/ja/cputil.html)
@@ -39,7 +39,7 @@
  2. 内容
 ==========
 
-    cputil-<Platform Name>_v200.zip(or .tar.gz)
+    cputil-<Platform Name>_v201.zip(or .tar.gz)
     |- Readme_En.txt                          // リリースノート (英語)
     |- Readme_Jp.txt                          // リリースノート (日本語)
     |- SoftwareLicenseAgreement.pdf           // ソフトウエア使用許諾書 (英語)
@@ -55,9 +55,9 @@
 ==========
 
     本ソフトウェアは現在、.NET Core 8.0 によってサポートされるプラットフォームに対応しています。
-      - Windows x64                         ... cputil-win-x64_v200.zip
-      - Linux x64                           ... cputil-linux-x64_v200.tar.gz
-      - Apple macOS x64 /arm64 (10.15以降)  ... cputil-macos_v200.zip
+      - Windows x64                         ... cputil-win-x64_v201.zip
+      - Linux x64                           ... cputil-linux-x64_v201.tar.gz
+      - Apple macOS x64 /arm64 (10.15以降)  ... cputil-macos_v201.zip
 
     いずれの場合も、自己完結型パッケージにてビルドされており、
     .NET Framework または .NET Core のインストールを必要とせずに目的のプラットフォームで実行できます。
@@ -82,7 +82,7 @@
     (https://star-m.jp/products/s_print/sdk/StarCloudPRNT/manual/ja/cputil.html)
 
     ### インストレーション
-    PC 上の任意のパスに cputil-<プラットフォーム名>_v200.zip(または .tar.gz)を解凍してください。
+    PC 上の任意のパスに cputil-<プラットフォーム名>_v201.zip(または .tar.gz)を解凍してください。
     (インストール場所と方法は、PC/サーバー管理者が任意で選択できます)
 
     以下の操作は、本使用例をテストするために実施します。
@@ -91,7 +91,7 @@
     また起動後、次のコマンドを実行してください。
 
     [Windows]
-    > cd <Extracted Directory Path>\cputil-win-x64_v200\cputil-win-x64
+    > cd <Extracted Directory Path>\cputil-win-x64_v201\cputil-win-x64
 
     [Linux]
     $ cd <Extracted Directory Path>/cputil-linux-x64
@@ -335,6 +335,11 @@
 =============
  8. 変更履歴
 =============
+
+    Ver 2.0.1
+    2025/08/27:
+        依存パッケージ(StarDocumentMarkup-Utility)の不具合修正に伴うアップデート
+         - JPEG画像を変換元データに指定するとエラーが発生する問題を修正
 
     Ver 2.0.0
     2025/05/19:

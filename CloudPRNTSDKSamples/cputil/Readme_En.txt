@@ -1,5 +1,5 @@
 ************************************************************
-      cputil Ver 2.0.0                           19/05/2025
+      cputil Ver 2.0.1                           27/08/2025
          Readme_En.txt             Star Micronics Co., Ltd.
 ************************************************************
 
@@ -16,14 +16,14 @@
  1. Overview
 =============
 
-    This package contains cputil Ver 2.0.0.
+    This package contains cputil Ver 2.0.1.
     cputil is intented to serve and a useful back-end tool to help
     with implementing CloudPRNT servers that are not .NET or .NET Core based.
 
     cputil can be use on any platform supported by .NET 8.0 including:
-      - Windows x64                              ... cputil-win-x64_v200.zip
-      - Linux x64                                ... cputil-linux-x64_v200.tar.gz
-      - Apple macOS x64 /arm64 (10.15 or later)  ... cputil-macos_v200.zip
+      - Windows x64                              ... cputil-win-x64_v201.zip
+      - Linux x64                                ... cputil-linux-x64_v201.tar.gz
+      - Apple macOS x64 /arm64 (10.15 or later)  ... cputil-macos_v201.zip
 
     In all cases, it is possible to build a self contained package that can be
     run on the desired platform without the need for a .NET Framework or .NET Core
@@ -36,7 +36,7 @@
  2. Contents
 =============
 
-    cputil-<Platform Name>_v200.zip(or .tar.gz)
+    cputil-<Platform Name>_v201.zip(or .tar.gz)
     |- Readme_En.txt                          // Release Notes (English)
     |- Readme_Jp.txt                          // Release Notes (Japanese)
     |- SoftwareLicenseAgreement.pdf           // Software License Agreement (English)
@@ -50,9 +50,9 @@
  3. Scope
 ==========
     cputil can be use on any platform supported by .NET 8.0 including:
-      - Windows x64                               ... cputil-win-x64_v200.zip
-      - Linux x64                                 ... cputil-linux-x64_v200.tar.gz
-      - Apple macOS x64 / arm64 (10.15 or later)  ... cputil-macos_v200.zip
+      - Windows x64                               ... cputil-win-x64_v201.zip
+      - Linux x64                                 ... cputil-linux-x64_v201.tar.gz
+      - Apple macOS x64 / arm64 (10.15 or later)  ... cputil-macos_v201.zip
 
     Works with these CloudPRNT client printers:
         - mC-Print2
@@ -87,7 +87,7 @@
     Please open the terminal or command prompt on each PC and perform following command.
 
     [Windows]
-    > cd <Extracted Directory Path>\cputil-win-x64_v200\cputil-win-x64
+    > cd <Extracted Directory Path>\cputil-win-x64_v201\cputil-win-x64
 
     [Linux]
     $ cd <Extracted Directory Path>/cputil-linux-x64
@@ -370,6 +370,11 @@
 ====================
  8. Release History
 ====================
+
+    Ver 2.0.1
+    2025/08/27:
+        Update due to bug fixes in the dependency package (StarDocumentMarkup-Utility).
+         - Fixed an issue where an error would occur when specifying a JPEG image as the source data.
 
     Ver 2.0.0
     2025/05/19:
