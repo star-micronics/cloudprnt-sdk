@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Diagnostics.CodeAnalysis;
 using StarMicronics.CloudPrnt;
@@ -10,13 +11,59 @@ using Newtonsoft.Json;
 
 namespace cputil
 {
+    // Exit codes returned by cputil.
+    enum ExitCode
+    {
+        Success = 0,
+
+        // The input file could not be read, or the requested conversion is not supported.
+        RuntimeError = 1,
+
+        // An unknown option was given, or an option was used without its required value.
+        UsageError = 2,
+    }
+
+    class UsageException : Exception
+    {
+        public UsageException(string message) : base(message) { }
+    }
+
+    class CpUtilException : Exception
+    {
+        public CpUtilException(string message) : base(message) { }
+    }
+
     class Program
     {
         static ConversionOptions opts = new ConversionOptions();
 
         [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(PrinterStatus))]
         [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(PrinterStatusDetail))]
-        static void Main(string[] args)
+        static int Main(string[] args)
+        {
+            try
+            {
+                return (int)Run(args);
+            }
+            catch (UsageException ex)
+            {
+                Console.Error.WriteLine("cputil: {0}", ex.Message);
+                PrintHelp(Console.Error);
+                return (int)ExitCode.UsageError;
+            }
+            catch (CpUtilException ex)
+            {
+                Console.Error.WriteLine("cputil: {0}", ex.Message);
+                return (int)ExitCode.RuntimeError;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine("cputil: {0}: {1}", ex.GetType().Name, ex.Message);
+                return (int)ExitCode.RuntimeError;
+            }
+        }
+
+        static ExitCode Run(string[] args)
         {
             opts.JobEndCutType = CutType.Full;
             opts.JobEndFeedToCutter = true;
@@ -29,7 +76,7 @@ namespace cputil
                 switch (args[i].ToLower())
                 {
                     case "help":
-                        PrintHelp();
+                        PrintHelp(Console.Out);
                         break;
 
                     case "version":
@@ -38,19 +85,19 @@ namespace cputil
                         break;
 
                     case "jsonstatus":
-                        Console.WriteLine(ConvertStatusToJson(args[++i]));
+                        Console.WriteLine(ConvertStatusToJson(NextArg(args, ref i, "jsonstatus")));
                         break;
 
                     case "mediatypes":
                         {
-                            string[] outputList = Document.GetOutputTypesFromFileName(args[++i]);
+                            string[] outputList = Document.GetOutputTypesFromFileName(NextArg(args, ref i, "mediatypes"));
                             Console.WriteLine(JsonConvert.SerializeObject(outputList));
                         }
                         break;
 
                     case "mediatypes-mime":
                         {
-                            string[] outputList = Document.GetOutputTypesFromType(args[++i]);
+                            string[] outputList = Document.GetOutputTypesFromType(NextArg(args, ref i, "mediatypes-mime"));
                             Console.WriteLine(JsonConvert.SerializeObject(outputList));
                         }
                         break;
@@ -60,79 +107,50 @@ namespace cputil
                         break;
 
                     case "decode":
-                        if(args.Length - i < 3)
                         {
-                            PrintHelp();
-                            break;
-                        }
+                            string format = NextArg(args, ref i, "decode");
+                            string filename = NextArg(args, ref i, "decode");
+                            string outputFile = NextArg(args, ref i, "decode");
+                            string fieldData = String.Empty;
 
-                        string format = args[++i];
-                        string filename = args[++i];
-                        string outputFile = args[++i];
-                        string fieldData = String.Empty;
-
-                        try
-                        {
-                            if (args.Length >= i + 2 && args[++i] == "-template")
+                            // Read the optional "-template <fieldDataFilename>" arguments
+                            if (i + 1 < args.Length && args[i + 1].ToLower() == "-template")
                             {
-                                fieldData = args[++i];
+                                i++;
+                                fieldData = NextArg(args, ref i, "-template");
                             }
+
+                            if (format.Equals("application/vnd.star.linematrix"))
+                            {
+                                opts.HorizontalResolution = (float)3.3334;
+                                opts.VerticalResolution = (float)3.3334;
+                            }
+
+                            // Validate before opening the output, so a failure does not leave an empty file
+                            ValidateOutputFormat(filename, format);
+
+                            WriteConvertedData(filename, fieldData, outputFile, format);
+
+                            Console.Error.WriteLine(String.Format("Wrote output to \"{0}\"", outputFile));
                         }
-                        catch (IndexOutOfRangeException)
-                        {
-                            PrintHelp();
-                            break;
-                        }
-
-                        Stream s = null;
-
-                        if (outputFile == "-" || outputFile == "" || outputFile == "[stdout]")
-                            s = Console.OpenStandardOutput();
-                        else
-                            s = new FileStream(outputFile, FileMode.Create);
-
-                        if (format.Equals("application/vnd.star.linematrix"))
-                        {
-                            opts.HorizontalResolution = (float)3.3334;
-                            opts.VerticalResolution = (float)3.3334;
-                        }
-
-                        //decode(format, filename, s);
-                        if (fieldData == String.Empty)  
-                        {
-                            Document.ConvertFile(filename, s, format, opts);
-                        }
-                        else // Optional : ApplyTemplate
-                        {
-                            // Input : Template data file (Star Document Markup) and Field data (JSON)
-                            // Output: Replaced and Converted to target format
-                            Document.ConvertFileWithApplyTemplate(filename, fieldData, s, format, opts);
-                        }
-
-                        s.Close();
-
-                        Console.Error.WriteLine(String.Format("Wrote output to \"{0}\"", outputFile));
                         break;
 
                     case "printarea":
-                        if(args.Length - i < 1)
                         {
-                            PrintHelp();
-                            break;
+                            int printableArea = 0;
+                            string printarea_length = NextArg(args, ref i, "printarea");
+                            bool result = int.TryParse(printarea_length, out printableArea);
+
+                            if (result)
+                                opts.DeviceWidth = printableArea;
+                            else
+                                // Warn only and keep going, to stay compatible with earlier versions
+                                Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"printarea XXX(X is numeric)\" ");
                         }
-                        int printableArea = 0;
-                        string printarea_length = args[++i];
-                        bool result = int.TryParse(printarea_length, out printableArea);
-
-                        if (result)
-                            opts.DeviceWidth = printableArea;
-                        else
-                            Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"printarea XXX(X is numeric)\" ");
-
                         break;
 
                     case "drawer-start":
-                        opts.OpenCashDrawer = DrawerOpenTime.StartOfJob; 
+                        opts.OpenCashDrawer = DrawerOpenTime.StartOfJob;
                         break;
 
                     case "drawer-end":
@@ -144,39 +162,31 @@ namespace cputil
                         break;
 
                     case "buzzer-start":
-                        if (args.Length - i < 1)
                         {
-                            PrintHelp();
-                            break;
+                            int buzzerStart = 0;
+                            string buzzerStart_time = NextArg(args, ref i, "buzzer-start");
+                            bool result_buzzerStart = int.TryParse(buzzerStart_time, out buzzerStart);
+
+                            if (result_buzzerStart)
+                                opts.BuzzerStartPattern = buzzerStart;
+                            else
+                                // Warn only and keep going, to stay compatible with earlier versions
+                                Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"buzzer-start X(X is numeric)\" ");
                         }
-
-                        int buzzerStart = 0;
-                        string buzzerStart_time = args[++i];
-                        bool result_buzzerStart = int.TryParse(buzzerStart_time, out buzzerStart);
-
-                        if (result_buzzerStart)
-                            opts.BuzzerStartPattern = buzzerStart;
-                        else
-                            Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"buzzer-start X(X is numeric)\" ");
-
                         break;
 
                     case "buzzer-end":
-                        if (args.Length - i < 1)
                         {
-                            PrintHelp();
-                            break;
+                            int buzzerEnd = 0;
+                            string buzzerEnd_time = NextArg(args, ref i, "buzzer-end");
+                            bool result_buzzerEnd = int.TryParse(buzzerEnd_time, out buzzerEnd);
+
+                            if (result_buzzerEnd)
+                                opts.BuzzerEndPattern = buzzerEnd;
+                            else
+                                // Warn only and keep going, to stay compatible with earlier versions
+                                Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"buzzer-end X(X is numeric)\" ");
                         }
-
-                        int buzzerEnd = 0;
-                        string buzzerEnd_time = args[++i];
-                        bool result_buzzerEnd = int.TryParse(buzzerEnd_time, out buzzerEnd);
-
-                        if (result_buzzerEnd)
-                            opts.BuzzerEndPattern = buzzerEnd;
-                        else
-                            Console.Error.WriteLine("Input value is incorrect. Please set correct value. e.g.) \"buzzer-end X(X is numeric)\" ");
-
                         break;
 
                     case "holdprint-default":
@@ -277,15 +287,75 @@ namespace cputil
                     case "waitkey":
                         Console.ReadKey();
                         break;
+
+                    default:
+                        throw new UsageException(String.Format("unknown option \"{0}\".", args[i]));
                 }
             }
 
             if (args.Length == 0)
-                PrintHelp();             
-             
+                PrintHelp(Console.Out);
+
+            return ExitCode.Success;
         }
 
-        static void PrintHelp()
+        // Get the value which follows an option, or report a usage error if it is missing.
+        static string NextArg(string[] args, ref int i, string option)
+        {
+            if (i + 1 >= args.Length)
+                throw new UsageException(String.Format("option \"{0}\" requires an argument.", option));
+
+            return args[++i];
+        }
+
+        // Check that the input file can be converted to the requested output format.
+        // The library does not throw for an unsupported format, it simply writes no data,
+        // so the failure has to be detected here.
+        static void ValidateOutputFormat(string fileName, string outputFormat)
+        {
+            string[] supported = Document.GetOutputTypesFromFileName(fileName);
+
+            if (!supported.Contains(outputFormat, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new CpUtilException(String.Format(
+                    "cannot convert \"{0}\" to \"{1}\". supported output formats are: {2}",
+                    fileName, outputFormat, String.Join(", ", supported)));
+            }
+        }
+
+        // Write the converted data. Output goes to standard output when the output file
+        // is given as "-", "" or "[stdout]".
+        static void WriteConvertedData(string fileName, string fieldDataFileName, string outputFile, string outputFormat)
+        {
+            bool toStandardOutput = (outputFile == "-" || outputFile == "" || outputFile == "[stdout]");
+
+            Stream s = toStandardOutput ? Console.OpenStandardOutput() : new FileStream(outputFile, FileMode.Create);
+
+            try
+            {
+                //decode(format, filename, s);
+                if (fieldDataFileName == String.Empty)
+                {
+                    Document.ConvertFile(fileName, s, outputFormat, opts);
+                }
+                else // Optional : ApplyTemplate
+                {
+                    // Input : Template data file (Star Document Markup) and Field data (JSON)
+                    // Output: Replaced and Converted to target format
+                    Document.ConvertFileWithApplyTemplate(fileName, fieldDataFileName, s, outputFormat, opts);
+                }
+            }
+            finally
+            {
+                // Do not close standard output, cputil keeps using it
+                if (toStandardOutput)
+                    s.Flush();
+                else
+                    s.Dispose();
+            }
+        }
+
+        static void PrintHelp(TextWriter output)
         {
             String help = String.Join(Environment.NewLine,
                 "cputil - Star CloudPRNT helper utility",
@@ -367,7 +437,7 @@ namespace cputil
                 "And holdprint-default/holdprint-valid/holdprint-invalid and",
                 "presentstatus-default/presentstatus-valid/presentstatus-invalid options are also same usage.");
 
-            Console.WriteLine(help);
+            output.WriteLine(help);
         }
 
         static void DisplayInfo()
@@ -375,7 +445,7 @@ namespace cputil
             Assembly asmSDMU = typeof(StarMicronics.StarDocumentMarkup.Document).Assembly;
             AssemblyName nameSDMU = asmSDMU.GetName();
             Version versionSDMU = nameSDMU.Version;
-            
+
             Console.WriteLine("{0}: {1}.{2}.{3}.{4}", nameSDMU.Name, versionSDMU.Major, versionSDMU.Minor, versionSDMU.Build, versionSDMU.Revision);
 
             Assembly asmCP = typeof(StarMicronics.CloudPrnt.PrinterStatus).Assembly;
